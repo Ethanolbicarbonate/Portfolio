@@ -1,0 +1,7 @@
+    
+<div class="text-container" [class.visible]="focusedPaper">
+  <div *ngIf="focusedPaper">
+    <h2>{{ focusedPaper.title }}</h2>
+    <p>{{ focusedPaper.description }}</p>
+  </div>
+</div>
