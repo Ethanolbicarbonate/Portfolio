@@ -1,3 +1,10 @@
     
 <app-scene></app-scene>
 <app-text-overlay [focusedPaper]="focusedPaper"></app-text-overlay>
+
+<button 
+  *ngIf="focusedPaper" 
+  class="back-button" 
+  (click)="returnToGeneralView()">
+  &#x21A9;
+</button>

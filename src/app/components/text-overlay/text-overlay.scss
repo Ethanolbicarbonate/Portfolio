@@ -1,10 +1,19 @@
 .text-container {
   position: fixed;
-  bottom: 10%;
-  left: 50%;
-  transform: translateX(-50%);
+  
+  // Vertically center the container
+  top: 50%;
+  transform: translateY(-50%);
+
+  // Position it from the left
+  left: 30%; // Or use a fixed value like 100px
+
+  // Set a max-width to prevent text from being too wide
+  max-width: 400px; 
+  width: 30%; // Use a percentage for responsiveness
+
   color: white;
-  text-align: center;
+  text-align: left; // Align text to the left
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
   pointer-events: none;
@@ -15,10 +24,11 @@
 
   h2 {
     font-size: 2.5rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem; // Add more space below the title
   }
 
   p {
     font-size: 1.2rem;
+    line-height: 1.6; // Improve readability for longer descriptions
   }
 }

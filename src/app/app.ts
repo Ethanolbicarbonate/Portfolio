@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 
   import { Scene } from './components/scene/scene';
 import { TextOverlay } from './components/text-overlay/text-overlay';
 
-import { Three } from './services/three';
+import { ThreeService } from './services/three.service';
 import { PaperData } from './models/paper-data.model';
 
 @Component({
@@ -23,11 +23,18 @@ import { PaperData } from './models/paper-data.model';
 export class App implements OnInit {
   focusedPaper: PaperData | null = null;
 
-  constructor(private three: Three) {}
+  constructor(private threeService: ThreeService) {}
 
   ngOnInit() {
-    this.three.onFocusChange.subscribe((data) => {
+    this.threeService.onFocusChange.subscribe((data) => {
       this.focusedPaper = data;
     });
+  }
+  @HostListener('window:keydown.escape') // <-- REMOVED ['$event']
+  onEscapeKey(): void { // <-- REMOVED the 'event' parameter
+    this.returnToGeneralView();
+  }
+  public returnToGeneralView(): void {
+    this.threeService.returnToGeneralView();
   }
 }
