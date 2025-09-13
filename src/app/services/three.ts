@@ -4,10 +4,6 @@ import * as THREE from 'three';
 import { PaperData } from '../models/paper-data.model';
 import { gsap } from 'gsap';
 import { Subject } from 'rxjs';
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass.js';
-import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 
 @Injectable({ providedIn: 'root' })
 export class Three {
