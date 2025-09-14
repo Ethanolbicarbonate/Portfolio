@@ -1,0 +1,125 @@
+// Main container for the "general view" UI elements
+.general-view-ui {
+  // Positioning: Full-screen overlay
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+
+  // Flexbox layout to position the title and tabs
+  display: flex;
+  flex-direction: column;
+  justify-content: center; // Vertically center the title
+  align-items: center; // Horizontally center everything
+  padding: 50px;
+  box-sizing: border-box;
+
+  // Animation: Control visibility and fade
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+
+  // By default, the UI should not intercept mouse clicks
+  pointer-events: none;
+
+  // When the UI is visible, make it opaque
+  &.visible {
+    opacity: 1;
+  }
+}
+
+// The huge main title
+.main-title {
+  color: #ffffff;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif; // Choose a clean, bold font
+  font-size: clamp(40px, 10vw, 150px); // Responsive font size
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.1;
+  text-transform: uppercase;
+  margin: 0;
+  // A subtle shadow can help readability against a complex 3D background
+  text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+// Container for the navigation tabs at the bottom
+.tabs-container {
+  position: absolute;
+  bottom: 40px;
+  
+  // Make the tabs themselves clickable
+  pointer-events: auto;
+
+  // Glassmorphism effect for the container
+  background: rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  display: flex;
+  gap: 10px;
+}
+
+// Individual tab buttons
+.tab-item {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+
+  // Style for the currently active tab
+  &.active {
+    background: rgba(255, 255, 255, 0.9);
+    color: #1a1a1a;
+    font-weight: 700;
+  }
+}
+
+.image-preview-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 50; // Should be above other UI but can be below modals
+
+  // Sizing and appearance
+  max-width: 90vw;
+  max-height: 80vh;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+
+  // Make it non-interactive so you can still scroll/click through it
+  pointer-events: none;
+
+  // Animation setup
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
+
+  &.visible {
+    opacity: 1;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: inherit;
+    max-height: inherit;
+    object-fit: contain; // Ensures the whole image is visible without distortion
+    border-radius: 6px; // Slightly smaller radius than the container
+  }
+}

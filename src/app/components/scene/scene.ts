@@ -18,7 +18,7 @@ export class Scene implements OnInit, AfterViewInit {
       title: 'Hello', 
       description: 'Description for paper 1.', 
       position: { x: -8, y: 5, z: -12 }, 
-      rotation: { x: 0.2, y: -0.8, z: 0.3 } 
+      rotation: { x: -0.2, y: 0.8, z: 0.3 } 
     },
     { 
       id: 2, 
@@ -26,7 +26,7 @@ export class Scene implements OnInit, AfterViewInit {
       title: 'Paper 2', 
       description: 'Description for paper 2.', 
       position: { x: 12, y: 2, z: -20 }, 
-      rotation: { x: -0.1, y: 1.2, z: -0.4 } 
+      rotation: { x: -0.3, y: 1.2, z: -0.4 } 
     },
     { 
       id: 3, 
@@ -34,7 +34,7 @@ export class Scene implements OnInit, AfterViewInit {
       title: 'Supp', 
       description: 'Description for paper 3.', 
       position: { x: -15, y: -8, z: -5 }, 
-      rotation: { x: 0.4, y: -1.5, z: 0.6 } 
+      rotation: { x: -0.2, y: 1, z: 0.6 } 
     },
     { 
       id: 4, 
@@ -50,7 +50,7 @@ export class Scene implements OnInit, AfterViewInit {
       title: 'Paper 5', 
       description: 'Description for paper 5.', 
       position: { x: -22, y: -15, z: -8 }, 
-      rotation: { x: 0.5, y: -2.1, z: 0.8 } 
+      rotation: { x: -0.2, y: 0.8, z: 0.8 } 
     },
     { 
       id: 6, 
@@ -58,7 +58,7 @@ export class Scene implements OnInit, AfterViewInit {
       title: 'Paper 6', 
       description: 'Description for paper 6.', 
       position: { x: 6, y: 18, z: -15 }, 
-      rotation: { x: -0.6, y: 0.4, z: 0.7 } 
+      rotation: { x: -0.3, y: 0.9, z: 0.7 } 
     },
     { 
       id: 7, 
@@ -66,7 +66,7 @@ export class Scene implements OnInit, AfterViewInit {
       title: 'Paper 7', 
       description: 'Description for paper 7.', 
       position: { x: -10, y: 12, z: -30 }, 
-      rotation: { x: 0.8, y: -0.7, z: -0.5 } 
+      rotation: { x: -0.2, y: 1, z: -0.5 } 
     },
     { 
       id: 8, 
@@ -74,7 +74,7 @@ export class Scene implements OnInit, AfterViewInit {
       title: 'Paper 8', 
       description: 'Description for paper 8.', 
       position: { x: 25, y: 8, z: -18 }, 
-      rotation: { x: 0.1, y: 1.8, z: 0.4 } 
+      rotation: { x: -0.3, y: 1.2, z: 0.4 } 
     },
     { 
       id: 9, 
@@ -82,7 +82,7 @@ export class Scene implements OnInit, AfterViewInit {
       title: 'Paper 9', 
       description: 'Description for paper 9.', 
       position: { x: -18, y: 22, z: -22 }, 
-      rotation: { x: -0.4, y: -1.2, z: 0.9 } 
+      rotation: { x: -0.2, y: -1.2, z: 0.9 } 
     },
     { 
       id: 10, 

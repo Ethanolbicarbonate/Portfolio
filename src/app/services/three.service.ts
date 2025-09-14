@@ -32,17 +32,15 @@ export class ThreeService {
   private bloomParams = {
     strength: 0.0,
     radius: 0.4,
-    threshold: 0.85
+    threshold: 0.85,
   };
 
-  
-
-    // Depth of Field settings
+  // Depth of Field settings
   private dofParams = {
-    focus: 1.0,      // Focus distance - much closer to camera
-    aperture: 0.002, // Much smaller aperture = less blur overall
-    maxblur: 0.005,  // Reduced maximum blur amount
-    enabled: false   // Start with DOF disabled, enable only when focusing
+    focus: 8.0, // Focus further back for general view blur
+    aperture: 0.006, // Larger aperture for more background blur
+    maxblur: 0.012, // Increased blur amount for general view
+    enabled: true, // Enable DOF by default for general view blur
   };
 
   // Lighting references for animation
@@ -70,22 +68,27 @@ export class ThreeService {
     this.scene.background = new THREE.Color(0x142029);
 
     // Camera with better FOV for cinematic feel
-    this.camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 1000);
+    this.camera = new THREE.PerspectiveCamera(
+      65,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
     this.camera.position.z = 5;
 
     // Enhanced Renderer with cinematic settings
-    this.renderer = new THREE.WebGLRenderer({ 
-      canvas: canvas.nativeElement, 
+    this.renderer = new THREE.WebGLRenderer({
+      canvas: canvas.nativeElement,
       antialias: true,
-      powerPreference: 'high-performance'
+      powerPreference: 'high-performance',
     });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    
+
     // Enhanced shadow settings
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    
+
     // Cinematic tone mapping and exposure
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.2;
@@ -96,37 +99,37 @@ export class ThreeService {
   }
 
   private setupPostProcessing(): void {
-  // Create the effect composer
-  this.composer = new EffectComposer(this.renderer);
-  
-  // Create the render pass (renders the scene)
-  this.renderPass = new RenderPass(this.scene, this.camera);
-  this.composer.addPass(this.renderPass);
-  
-  // Create the depth of field pass
-  this.bokehPass = new BokehPass(this.scene, this.camera, {
-    focus: this.dofParams.focus,
-    aperture: this.dofParams.aperture,
-    maxblur: this.dofParams.maxblur,
-  });
-  
-  // Start with DOF disabled for general viewing
-  this.bokehPass.enabled = this.dofParams.enabled;
-  this.composer.addPass(this.bokehPass);
-  
-  // Create the bloom pass (after DOF for better visual hierarchy)
-  this.bloomPass = new UnrealBloomPass(
-    new THREE.Vector2(window.innerWidth, window.innerHeight),
-    this.bloomParams.strength,
-    this.bloomParams.radius,
-    this.bloomParams.threshold
-  );
-  this.composer.addPass(this.bloomPass);
-  
-  // Output pass for final rendering
-  this.outputPass = new OutputPass();
-  this.composer.addPass(this.outputPass);
-}
+    // Create the effect composer
+    this.composer = new EffectComposer(this.renderer);
+
+    // Create the render pass (renders the scene)
+    this.renderPass = new RenderPass(this.scene, this.camera);
+    this.composer.addPass(this.renderPass);
+
+    // Create the depth of field pass
+    this.bokehPass = new BokehPass(this.scene, this.camera, {
+      focus: this.dofParams.focus,
+      aperture: this.dofParams.aperture,
+      maxblur: this.dofParams.maxblur,
+    });
+
+    // Enable DOF by default for general view blur
+    this.bokehPass.enabled = this.dofParams.enabled;
+    this.composer.addPass(this.bokehPass);
+
+    // Create the bloom pass (after DOF for better visual hierarchy)
+    this.bloomPass = new UnrealBloomPass(
+      new THREE.Vector2(window.innerWidth, window.innerHeight),
+      this.bloomParams.strength,
+      this.bloomParams.radius,
+      this.bloomParams.threshold
+    );
+    this.composer.addPass(this.bloomPass);
+
+    // Output pass for final rendering
+    this.outputPass = new OutputPass();
+    this.composer.addPass(this.outputPass);
+  }
 
   private setupLighting(): void {
     // Dramatically reduced ambient light for better contrast
@@ -156,7 +159,7 @@ export class ThreeService {
     const keyLight = new THREE.DirectionalLight(0xfff4e6, 1.8);
     keyLight.position.set(8, 10, 6);
     keyLight.castShadow = true;
-    
+
     // Enhanced shadow settings for key light
     keyLight.shadow.mapSize.width = 2048;
     keyLight.shadow.mapSize.height = 2048;
@@ -168,7 +171,7 @@ export class ThreeService {
     keyLight.shadow.camera.bottom = -10;
     keyLight.shadow.bias = -0.0001;
     keyLight.shadow.radius = 8;
-    
+
     this.scene.add(keyLight);
 
     // Fill Light - Cool-toned light to balance shadows
@@ -210,22 +213,25 @@ export class ThreeService {
     this.scene.add(this.spotLight.target);
   }
 
-public addPapers(paperData: PaperData[]): void {
+  public addPapers(paperData: PaperData[]): void {
     this.paperData = paperData;
     const textureLoader = new THREE.TextureLoader();
-    
+
     // Fixed height for all papers
     const fixedHeight = 2.8;
-    
+
     // Enhanced normal map
-    const normalMapTexture = textureLoader.load('assets/images/paperNormal.jpg');
-   
+    const normalMapTexture = textureLoader.load('assets/images/paperNormal.png');
+
     // Create environment map for reflections
     const cubeTextureLoader = new THREE.CubeTextureLoader();
     const envMap = cubeTextureLoader.load([
-      'assets/images/posx.jpg', 'assets/images/negx.jpg',
-      'assets/images/posy.jpg', 'assets/images/negy.jpg',
-      'assets/images/posz.jpg', 'assets/images/negz.jpg'
+      'assets/images/posx.jpg',
+      'assets/images/negx.jpg',
+      'assets/images/posy.jpg',
+      'assets/images/negy.jpg',
+      'assets/images/posz.jpg',
+      'assets/images/negz.jpg',
     ]);
     this.papers = new Array(paperData.length);
     this.paperOriginalPositions = new Array(paperData.length);
@@ -235,42 +241,42 @@ public addPapers(paperData: PaperData[]): void {
         // Calculate width based on aspect ratio
         const aspectRatio = loadedTexture.image.width / loadedTexture.image.height;
         const calculatedWidth = fixedHeight * aspectRatio;
-        
+
         // Create geometry with correct dimensions
         const geometry = new THREE.PlaneGeometry(calculatedWidth, fixedHeight, 1, 1);
-        
+
         loadedTexture.colorSpace = THREE.SRGBColorSpace;
-       
+
         // Enhanced material properties
         const material = new THREE.MeshStandardMaterial({
           map: loadedTexture,
           normalMap: normalMapTexture,
           envMap: envMap,
           side: THREE.DoubleSide,
-          roughness: 0.3,
+          roughness: 0.4,
           metalness: 0.1,
           envMapIntensity: 0.4,
           transparent: false,
-          alphaTest: 0.1
+          alphaTest: 0.1,
         });
-       
+
         material.normalScale.set(1.2, 1.2);
-       
+
         const paper = new THREE.Mesh(geometry, material);
         paper.castShadow = true;
         paper.receiveShadow = true;
         paper.position.set(data.position.x, data.position.y, data.position.z);
         paper.rotation.set(data.rotation.x, data.rotation.y, data.rotation.z);
-        
+
         // Store original positions for animation
         this.paperOriginalPositions.push(paper.position.clone());
-       
+
         this.papers[index] = paper;
         this.paperOriginalPositions[index] = paper.position.clone();
         this.scene.add(paper);
       });
     });
-}
+  }
   public animate(): void {
     this.ngZone.runOutsideAngular(() => {
       if (document.readyState !== 'loading') {
@@ -289,18 +295,18 @@ public addPapers(paperData: PaperData[]): void {
 
   private render(): void {
     requestAnimationFrame(() => this.render());
-    
+
     this.animationTime += 0.01;
-    
+
     // Dynamic light animation
     this.animateAccentLights();
-    
+
     // Enhanced paper animations
     this.animatePapers();
-    
+
     // Update post-processing effects
     this.updatePostProcessing();
-    
+
     // Render with post-processing
     this.composer.render();
   }
@@ -310,7 +316,7 @@ public addPapers(paperData: PaperData[]): void {
     this.bloomPass.strength = this.bloomParams.strength;
     this.bloomPass.radius = this.bloomParams.radius;
     this.bloomPass.threshold = this.bloomParams.threshold;
-    
+
     // Update depth of field parameters
     if (this.bokehPass && this.dofParams.enabled) {
       const uniforms = (this.bokehPass as any).uniforms;
@@ -326,19 +332,19 @@ public addPapers(paperData: PaperData[]): void {
     // Animate accent lights in circular patterns
     const radius1 = 4;
     const radius2 = 6;
-    
+
     this.accentLight1.position.x = Math.cos(this.animationTime * 0.5) * radius1;
     this.accentLight1.position.z = Math.sin(this.animationTime * 0.5) * radius1;
     this.accentLight1.position.y = 3 + Math.sin(this.animationTime * 0.3) * 1.5;
-    
+
     this.accentLight2.position.x = Math.cos(-this.animationTime * 0.7) * radius2;
     this.accentLight2.position.z = Math.sin(-this.animationTime * 0.7) * radius2;
     this.accentLight2.position.y = -2 + Math.cos(this.animationTime * 0.4) * 2;
-    
+
     // Subtle rim light movement
     this.rimLight.position.x = -2 + Math.sin(this.animationTime * 0.2) * 1;
     this.rimLight.position.z = -8 + Math.cos(this.animationTime * 0.15) * 2;
-    
+
     // Dynamic spotlight targeting
     this.spotLight.target.position.x = Math.sin(this.animationTime * 0.1) * 2;
     this.spotLight.target.position.y = Math.cos(this.animationTime * 0.1) * 1;
@@ -347,19 +353,20 @@ public addPapers(paperData: PaperData[]): void {
   private animatePapers(): void {
     this.papers.forEach((paper, index) => {
       const originalPos = this.paperOriginalPositions[index];
-      
+
       // Subtle floating animation with individual timing offsets
       const timeOffset = index * 0.5;
       const floatAmplitude = 0.08;
       const rotationSpeed = 0.3;
-      
+
       // Gentle floating movement
       paper.position.y = originalPos.y + Math.sin(this.animationTime + timeOffset) * floatAmplitude;
-      paper.position.x = originalPos.x + Math.cos(this.animationTime * 0.7 + timeOffset) * (floatAmplitude * 0.5);
-      
+      paper.position.x =
+        originalPos.x + Math.cos(this.animationTime * 0.7 + timeOffset) * (floatAmplitude * 0.5);
+
       // Continuous circular rotation for light catching
       const gentleAngle = Math.PI * 0.08; // ~14 degrees each way
-      paper.rotation.y = Math.sin(this.animationTime * rotationSpeed + timeOffset) * gentleAngle;      
+      paper.rotation.y = Math.sin(this.animationTime * rotationSpeed + timeOffset) * gentleAngle;
       // Scale pulsing for dynamic presence
       const scaleVariation = 1 + Math.sin(this.animationTime * 0.5 + timeOffset) * 0.02;
       paper.scale.set(scaleVariation, scaleVariation, scaleVariation);
@@ -381,147 +388,142 @@ public addPapers(paperData: PaperData[]): void {
   }
 
   public setupScrollAnimation(): void {
-    window.addEventListener('wheel', (event) => {
-      event.preventDefault();
-      
-      if (this.isScrolling) {
-        return;
-      }
+    window.addEventListener(
+      'wheel',
+      (event) => {
+        event.preventDefault();
 
-      this.accumulatedScroll += Math.abs(event.deltaY);
+        if (this.isScrolling) {
+          return;
+        }
 
-      if (this.accumulatedScroll >= this.scrollThreshold) {
-        const scrollDirection = event.deltaY > 0 ? 1 : -1;
-        this.updateFocus(scrollDirection);
-        
-        this.accumulatedScroll = 0;
-        this.isScrolling = true;
-        setTimeout(() => {
-          this.isScrolling = false;
-        }, this.scrollCooldown);
-      }
-    }, { passive: false });
+        this.accumulatedScroll += Math.abs(event.deltaY);
+
+        if (this.accumulatedScroll >= this.scrollThreshold) {
+          const scrollDirection = event.deltaY > 0 ? 1 : -1;
+          this.updateFocus(scrollDirection);
+
+          this.accumulatedScroll = 0;
+          this.isScrolling = true;
+          setTimeout(() => {
+            this.isScrolling = false;
+          }, this.scrollCooldown);
+        }
+      },
+      { passive: false }
+    );
   }
 
   private updateFocus(direction: number): void {
-  const newIndex = this.currentFocusIndex + direction;
+    const newIndex = this.currentFocusIndex + direction;
 
-  if (newIndex >= 0 && newIndex < this.papers.length) {
-    if (this.currentFocusIndex !== -1) {
-      const oldPaper = this.papers[this.currentFocusIndex];
-      // Animate back to original state
-      gsap.to(oldPaper.scale, {
-        duration: 0.8,
-        x: 1,
-        y: 1,
-        z: 1,
-        ease: 'power2.out'
+    if (newIndex >= 0 && newIndex < this.papers.length) {
+      if (this.currentFocusIndex !== -1) {
+        const oldPaper = this.papers[this.currentFocusIndex];
+        // Animate back to original state
+        gsap.to(oldPaper.scale, {
+          duration: 0.8,
+          x: 1,
+          y: 1,
+          z: 1,
+          ease: 'power2.out',
+        });
+
+        // Fade out bloom effect
+        gsap.to(this.bloomParams, {
+          duration: 1.0,
+          strength: 0.0,
+          ease: 'power2.out',
+        });
+      }
+
+      this.currentFocusIndex = newIndex;
+      const newPaper = this.papers[this.currentFocusIndex];
+
+      // Enhanced focus animation with sharper DOF for focused paper
+      gsap.to(this.camera.position, {
+        duration: 1.8,
+        x: newPaper.position.x - 1.5,
+        y: newPaper.position.y,
+        z: newPaper.position.z + 4,
+        ease: 'power3.inOut',
       });
-      
-      // Fade out bloom effect
+
+      // DOF is already enabled, just adjust parameters for focused view
+      gsap.to(this.dofParams, {
+        duration: 1.8,
+        focus: 4, // Sharp focus on the paper
+        aperture: 0.01, // Larger aperture for more background blur
+        maxblur: 0.02, // Increased blur for background separation
+        ease: 'power2.inOut',
+      });
+
+      // Scale up focused paper slightly
+      gsap.to(newPaper.scale, {
+        duration: 1.2,
+        x: 1.05,
+        y: 1.05,
+        z: 1.05,
+        ease: 'power2.out',
+      });
+
+      // Adjust spotlight to focus on selected paper
+      gsap.to(this.spotLight.target.position, {
+        duration: 1.5,
+        x: newPaper.position.x,
+        y: newPaper.position.y,
+        z: newPaper.position.z,
+        ease: 'power2.inOut',
+      });
+
+      // Animate bloom effect IN
+      gsap.to(this.bloomParams, {
+        duration: 1.5,
+        strength: 1,
+        ease: 'power2.inOut',
+        delay: 0.3,
+      });
+
+      this.onFocusChange.next(this.paperData[this.currentFocusIndex]);
+    } else if (newIndex < 0) {
+      // Return to general view with its own blur settings
       gsap.to(this.bloomParams, {
         duration: 1.0,
         strength: 0.0,
-        ease: 'power2.out'
+        ease: 'power2.out',
       });
-    }
 
-    this.currentFocusIndex = newIndex;
-    const newPaper = this.papers[this.currentFocusIndex];
-    
-    // Calculate the distance from camera to paper
-    const focusDistance = this.camera.position.distanceTo(newPaper.position);
-    
-    // Enhanced focus animation with DOF
-    gsap.to(this.camera.position, {
-      duration: 1.8,
-      x: newPaper.position.x - 1.5,
-      y: newPaper.position.y,
-      z: newPaper.position.z + 4,
-      ease: 'power3.inOut'
-    });
-    
-    // Enable DOF and animate focus to the paper
-    this.dofParams.enabled = true;
-    this.bokehPass.enabled = true;
-    
-    gsap.to(this.dofParams, {
-      duration: 1.8,
-      focus: 4, // Distance from camera to paper when focused
-      aperture: 0.008, // Moderate aperture for some background blur
-      maxblur: 0.015,  // Increased blur for background separation
-      ease: 'power2.inOut'
-    });
-    
-    // Scale up focused paper slightly
-    gsap.to(newPaper.scale, {
-      duration: 1.2,
-      x: 1.05,
-      y: 1.05,
-      z: 1.05,
-      ease: 'power2.out'
-    });
-    
-    // Adjust spotlight to focus on selected paper
-    gsap.to(this.spotLight.target.position, {
-      duration: 1.5,
-      x: newPaper.position.x,
-      y: newPaper.position.y,
-      z: newPaper.position.z,
-      ease: 'power2.inOut'
-    });
-    
-    // Animate bloom effect IN
-    gsap.to(this.bloomParams, {
-      duration: 1.5,
-      strength: 1,
-      ease: 'power2.inOut',
-      delay: 0.3
-    });
-    
-    this.onFocusChange.next(this.paperData[this.currentFocusIndex]);
-  } else if (newIndex < 0) {
-    // Reset effects when no paper is focused
-    gsap.to(this.bloomParams, {
-      duration: 1.0,
-      strength: 0.0,
-      ease: 'power2.out'
-    });
-    
-    // Disable DOF for general viewing
-    gsap.to(this.dofParams, {
-      duration: 1.8,
-      focus: 1.0,
-      aperture: 0.002,
-      maxblur: 0.005,
-      ease: 'power2.inOut',
-      onComplete: () => {
-        this.dofParams.enabled = false;
-        this.bokehPass.enabled = false;
-      }
-    });
-    
-    this.currentFocusIndex = -1;
-    gsap.to(this.camera.position, {
-      duration: 1.8,
-      x: 0,
-      y: 0,
-      z: 5,
-      ease: 'power3.inOut'
-    });
-    
-    // Reset spotlight
-    gsap.to(this.spotLight.target.position, {
-      duration: 1.5,
-      x: 0,
-      y: 0,
-      z: 0,
-      ease: 'power2.inOut'
-    });
-    
-    this.onFocusChange.next(null);
+      // Animate to general view DOF settings (blurry background)
+      gsap.to(this.dofParams, {
+        duration: 1.8,
+        focus: 8.0, // Focus further back for general view
+        aperture: 0.006, // Moderate blur for atmospheric effect
+        maxblur: 0.012, // Maintain some blur in general view
+        ease: 'power2.inOut',
+        // Note: DOF stays enabled, no onComplete callback to disable it
+      });
+
+      this.currentFocusIndex = -1;
+      gsap.to(this.camera.position, {
+        duration: 1.8,
+        x: 0,
+        y: 0,
+        z: 5,
+        ease: 'power3.inOut',
+      });
+
+      // Reset spotlight
+      gsap.to(this.spotLight.target.position, {
+        duration: 1.5,
+        x: 0,
+        y: 0,
+        z: 0,
+        ease: 'power2.inOut',
+      });
+
+      this.onFocusChange.next(null);
+    }
   }
-}
   public returnToGeneralView(): void {
     // Do nothing if we are already in the general view
     if (this.currentFocusIndex === -1) {
@@ -536,30 +538,25 @@ public addPapers(paperData: PaperData[]): void {
         x: 1,
         y: 1,
         z: 1,
-        ease: 'power2.out'
+        ease: 'power2.out',
       });
     }
-
-    // --- This is the same logic from your updateFocus "else" block ---
 
     // Reset effects when no paper is focused
     gsap.to(this.bloomParams, {
       duration: 1.0,
       strength: 0.0,
-      ease: 'power2.out'
+      ease: 'power2.out',
     });
 
-    // Disable DOF for general viewing
+    // Animate to general view DOF settings (keep blur enabled)
     gsap.to(this.dofParams, {
       duration: 1.8,
-      focus: 1.0,
-      aperture: 0.002,
-      maxblur: 0.005,
+      focus: 8.0, // Focus further back for general view blur
+      aperture: 0.006, // Moderate blur for atmospheric effect
+      maxblur: 0.012, // Maintain some blur in general view
       ease: 'power2.inOut',
-      onComplete: () => {
-        this.dofParams.enabled = false;
-        this.bokehPass.enabled = false;
-      }
+      // DOF stays enabled - no onComplete callback
     });
 
     // Reset the focus index state
@@ -571,7 +568,7 @@ public addPapers(paperData: PaperData[]): void {
       x: 0,
       y: 0,
       z: 5,
-      ease: 'power3.inOut'
+      ease: 'power3.inOut',
     });
 
     // Reset spotlight
@@ -580,7 +577,7 @@ public addPapers(paperData: PaperData[]): void {
       x: 0,
       y: 0,
       z: 0,
-      ease: 'power2.inOut'
+      ease: 'power2.inOut',
     });
 
     // Notify the component that no paper is focused
@@ -627,7 +624,7 @@ public addPapers(paperData: PaperData[]): void {
     return {
       focus: this.dofParams.focus,
       aperture: this.dofParams.aperture,
-      maxblur: this.dofParams.maxblur
+      maxblur: this.dofParams.maxblur,
     };
   }
 
@@ -636,6 +633,7 @@ public addPapers(paperData: PaperData[]): void {
     if (this.bokehPass) {
       this.bokehPass.enabled = enabled;
     }
+    // Note: This method can still be used to completely disable DOF if needed
   }
 
   public isDOFEnabled(): boolean {
@@ -647,7 +645,7 @@ public addPapers(paperData: PaperData[]): void {
     gsap.to(this.dofParams, {
       duration: 1.0,
       focus: distance,
-      ease: 'power2.out'
+      ease: 'power2.out',
     });
   }
 
@@ -656,7 +654,7 @@ public addPapers(paperData: PaperData[]): void {
     gsap.to(this.dofParams, {
       duration: duration,
       aperture: targetAperture,
-      ease: 'power2.inOut'
+      ease: 'power2.inOut',
     });
   }
 }
