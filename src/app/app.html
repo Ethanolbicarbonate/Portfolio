@@ -1,5 +1,7 @@
 <!-- File: .\app\app.html -->
-<router-outlet></router-outlet>
+<div [@routeAnimations]="o.activatedRouteData['animation']">
+  <router-outlet #o="outlet"></router-outlet>
+</div>
 
 <!-- Navigation bar moved here to be globally available -->
 <nav class="tabs-container">
