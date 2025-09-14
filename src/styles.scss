@@ -1,3 +1,5 @@
+// File: .\styles.scss
+
 .back-button {
   position: fixed;
   bottom: 30px;
@@ -20,7 +22,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   // Transitions
   transition: background-color 0.3s ease, transform 0.3s ease;
 
@@ -47,4 +49,51 @@ input,
 textarea,
 select {
   font-family: inherit;
+}
+
+// Global Navigation Bar Styles
+.tabs-container {
+  position: fixed; /* Changed from absolute to fixed for consistent positioning */
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%); /* Center horizontally */
+  z-index: 50; /* Ensure it's above the 3D scene but below image previews/back button */
+
+  // Make the tabs themselves clickable
+  pointer-events: auto;
+
+  // Glassmorphism effect for the container
+  background: rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  display: flex;
+  gap: 10px;
+}
+
+// Individual tab buttons
+.tab-item {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+
+  // Style for the currently active tab
+  &.active {
+    background: rgba(255, 255, 255, 0.9);
+    color: #1a1a1a;
+    font-weight: 700;
+  }
 }

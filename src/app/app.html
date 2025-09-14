@@ -1,29 +1,8 @@
-<app-scene></app-scene>
-<app-text-overlay [focusedPaper]="focusedPaper" (viewImage)="onPreviewImage($event)">
-</app-text-overlay>
+<!-- File: .\app\app.html -->
+<router-outlet></router-outlet>
 
-<div class="general-view-ui" [class.visible]="!focusedPaper">
-  <h1 class="main-title">
-    <img src="assets/images/EJC.svg" alt="EJC Logo" class="main-logo" />
-  </h1>
-
-  <nav class="tabs-container">
-    <button class="tab-item active">Projects</button>
-    <button class="tab-item">About</button>
-  </nav>
-</div>
-
-@if (focusedPaper) {
-  <button class="back-button" (click)="returnToGeneralView()">&#x21A9;</button>
-}
-
-@if (previewImageUrl) {
-  <div
-    class="image-preview-overlay"
-    [class.visible]="isPreviewVisible"
-    (click)="closePreview()">
-
-    <img [src]="previewImageUrl" alt="Full-screen preview of the selected paper" />
-
-  </div>
-}
+<!-- Navigation bar moved here to be globally available -->
+<nav class="tabs-container">
+  <button class="tab-item" routerLink="/projects" routerLinkActive="active">Projects</button>
+  <button class="tab-item" routerLink="/about" routerLinkActive="active">About</button>
+</nav>

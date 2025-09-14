@@ -1,3 +1,4 @@
+// File: .\app\services\three.service.ts
 import { Injectable, ElementRef, NgZone } from '@angular/core';
 import * as THREE from 'three';
 import { PaperData } from '../models/paper-data.model';
@@ -58,6 +59,7 @@ export class ThreeService {
   private scrollCooldown = 2000;
   private scrollThreshold = 100;
   private accumulatedScroll = 0;
+  private wheelEventHandler: ((event: WheelEvent) => void) | null = null; // Store reference to handler
 
   private particleMaterial!: THREE.ShaderMaterial;
 
@@ -396,30 +398,42 @@ export class ThreeService {
   }
 
   public setupScrollAnimation(): void {
-    window.addEventListener(
-      'wheel',
-      (event) => {
-        event.preventDefault();
+    // Only set up the listener if it's not already active
+    if (this.wheelEventHandler) {
+      return;
+    }
 
-        if (this.isScrolling) {
-          return;
-        }
+    this.wheelEventHandler = (event) => {
+      event.preventDefault(); // Prevent default scroll behavior
 
-        this.accumulatedScroll += Math.abs(event.deltaY);
+      if (this.isScrolling) {
+        return;
+      }
 
-        if (this.accumulatedScroll >= this.scrollThreshold) {
-          const scrollDirection = event.deltaY > 0 ? 1 : -1;
-          this.updateFocus(scrollDirection);
+      this.accumulatedScroll += Math.abs(event.deltaY);
 
-          this.accumulatedScroll = 0;
-          this.isScrolling = true;
-          setTimeout(() => {
-            this.isScrolling = false;
-          }, this.scrollCooldown);
-        }
-      },
-      { passive: false }
-    );
+      if (this.accumulatedScroll >= this.scrollThreshold) {
+        const scrollDirection = event.deltaY > 0 ? 1 : -1;
+        this.updateFocus(scrollDirection);
+
+        this.accumulatedScroll = 0;
+        this.isScrolling = true;
+        setTimeout(() => {
+          this.isScrolling = false;
+        }, this.scrollCooldown);
+      }
+    };
+    window.addEventListener('wheel', this.wheelEventHandler, { passive: false });
+  }
+
+  public disableScrollAnimation(): void {
+    // Remove the listener if it's active
+    if (this.wheelEventHandler) {
+      window.removeEventListener('wheel', this.wheelEventHandler);
+      this.wheelEventHandler = null;
+    }
+    this.accumulatedScroll = 0; // Reset accumulated scroll
+    this.isScrolling = false; // Reset scrolling state
   }
 
   private updateFocus(direction: number): void {
@@ -724,7 +738,7 @@ export class ThreeService {
         `
       // Calculate a smoothly oscillating value between 0.0 and 1.0
       float blink = (sin(time * vAnimationData.y + vAnimationData.x) + 1.0) / 2.0;
-      
+
       // Make the blinking sharper by using pow()
       blink = pow(blink, 2.0);
 
