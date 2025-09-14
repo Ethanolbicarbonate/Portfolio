@@ -1,5 +1,5 @@
 // File: .\app\services\three.service.ts
-import { Injectable, ElementRef, NgZone } from '@angular/core';
+import { Injectable, ElementRef, NgZone, OnDestroy } from '@angular/core';
 import * as THREE from 'three';
 import { PaperData } from '../models/paper-data.model';
 import { gsap } from 'gsap';
@@ -13,7 +13,7 @@ import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 
 @Injectable({ providedIn: 'root' })
-export class ThreeService {
+export class ThreeService implements OnDestroy {
   private camera!: THREE.PerspectiveCamera;
   private scene!: THREE.Scene;
   private renderer!: THREE.WebGLRenderer;
@@ -53,6 +53,7 @@ export class ThreeService {
   // Animation properties
   private animationTime = 0;
   private paperOriginalPositions: THREE.Vector3[] = [];
+  private animationFrameId: number | null = null; // NEW: To store the requestAnimationFrame ID
 
   // Scroll throttling properties
   private isScrolling = false;
@@ -62,10 +63,23 @@ export class ThreeService {
   private wheelEventHandler: ((event: WheelEvent) => void) | null = null; // Store reference to handler
 
   private particleMaterial!: THREE.ShaderMaterial;
+  private particles!: THREE.Points; // Store reference to particles for disposal
 
   constructor(private ngZone: NgZone) {}
 
+  // NEW: Angular's lifecycle hook for service destruction
+  ngOnDestroy(): void {
+    console.log('ThreeService ngOnDestroy called. Disposing scene.');
+    this.disposeScene();
+  }
+
   public createScene(canvas: ElementRef<HTMLCanvasElement>): void {
+    if (this.scene && this.renderer) {
+      console.warn(
+        'Three.js scene already exists. Disposing existing scene before creating a new one.'
+      );
+      this.disposeScene();
+    }
     // Scene
     this.scene = new THREE.Scene();
     this.scene.fog = new THREE.Fog(0x1a1a1a, 10, 50);
@@ -284,11 +298,38 @@ export class ThreeService {
   }
   public animate(): void {
     this.ngZone.runOutsideAngular(() => {
+      // Ensure only one animation loop is active
+      if (this.animationFrameId !== null) {
+        cancelAnimationFrame(this.animationFrameId);
+      }
+
+      const animateLoop = () => {
+        this.animationTime += 0.01;
+
+        // Dynamic light animation
+        this.animateAccentLights();
+
+        // Enhanced paper animations
+        this.animatePapers();
+
+        if (this.particleMaterial) {
+          this.particleMaterial.uniforms['time'].value = this.animationTime;
+        }
+
+        // Update post-processing effects
+        this.updatePostProcessing();
+
+        // Render with post-processing
+        this.composer.render();
+
+        this.animationFrameId = requestAnimationFrame(animateLoop); // Store the ID
+      };
+
       if (document.readyState !== 'loading') {
-        this.render();
+        this.animationFrameId = requestAnimationFrame(animateLoop);
       } else {
         window.addEventListener('DOMContentLoaded', () => {
-          this.render();
+          this.animationFrameId = requestAnimationFrame(animateLoop);
         });
       }
 
@@ -296,6 +337,90 @@ export class ThreeService {
         this.resize();
       });
     });
+  }
+
+  public stopAnimation(): void {
+    if (this.animationFrameId !== null) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
+      console.log('Three.js animation loop stopped.');
+    }
+  }
+
+  // NEW: Comprehensive disposal method for Three.js resources
+  public disposeScene(): void {
+    this.stopAnimation(); // Stop animation first
+
+    if (!this.renderer || !this.scene) {
+      console.log('No Three.js scene or renderer to dispose.');
+      return;
+    }
+
+    // Dispose of all scene objects
+    this.scene.traverse((object) => {
+      if (!(object instanceof THREE.Mesh)) return;
+
+      (object as THREE.Mesh).geometry.dispose();
+
+      const materials = (object as THREE.Mesh).material;
+      if (Array.isArray(materials)) {
+        materials.forEach((material) => this.disposeMaterial(material));
+      } else if (materials instanceof THREE.Material) {
+        this.disposeMaterial(materials);
+      }
+    });
+
+    // Dispose of post-processing passes and composer
+    if (this.composer) {
+      this.composer.passes.forEach((pass) => {
+        if ((pass as any).dispose) {
+          // Check if pass has a dispose method (some don't, like RenderPass)
+          (pass as any).dispose();
+        }
+      });
+      // The composer itself doesn't have a formal dispose, but clearing passes is key
+    }
+
+    // Dispose renderer
+    this.renderer.dispose();
+    this.renderer.domElement.remove(); // Remove canvas element from DOM if not managed by Angular view removal
+    console.log('Three.js renderer disposed.');
+
+    // Clear references
+    this.scene = null as any;
+    this.camera = null as any;
+    this.renderer = null as any;
+    this.papers = [];
+    this.paperData = [];
+    this.paperOriginalPositions = [];
+    this.currentFocusIndex = -1;
+    this.composer = null as any;
+    this.bloomPass = null as any;
+    this.bokehPass = null as any;
+    this.renderPass = null as any;
+    this.outputPass = null as any; // Clear outputPass reference
+    this.particleMaterial = null as any; // Clear reference
+    if (this.particles) {
+      // Dispose particles geometry if it exists
+      this.particles.geometry.dispose();
+      this.scene.remove(this.particles);
+      this.particles = null as any;
+    }
+
+    // Remove event listeners
+    this.disableScrollAnimation();
+    window.removeEventListener('resize', this.resize); // Ensure resize listener is removed
+  }
+
+  // Helper to dispose material and its textures
+  private disposeMaterial(material: THREE.Material): void {
+    material.dispose();
+    for (const key in material) {
+      const value = (material as any)[key];
+      if (value instanceof THREE.Texture) {
+        value.dispose();
+      }
+    }
   }
 
   private render(): void {
@@ -751,5 +876,6 @@ export class ThreeService {
 
     const particles = new THREE.Points(geometry, material);
     this.scene.add(particles);
+    this.particles = particles;
   }
 }

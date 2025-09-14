@@ -1,6 +1,7 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+// File: .\app\components\projects\projects.component.ts
+import { Component, OnInit, OnDestroy, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router'; // Added for potential nested routing if needed, though not strictly used here
+import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { Scene } from '../scene/scene';
 import { TextOverlayComponent } from '../text-overlay/text-overlay';
 import { ThreeService } from '../../services/three.service';
@@ -14,6 +15,8 @@ import { PaperData } from '../../models/paper-data.model';
   styleUrls: ['./projects.component.scss']
 })
 export class ProjectsComponent implements OnInit, OnDestroy {
+  @ViewChild(Scene) private threeSceneComponent!: Scene;
+
   focusedPaper: PaperData | null = null;
   previewImageUrl: string | null = null;
   isPreviewVisible: boolean = false;
@@ -21,20 +24,24 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   constructor(private threeService: ThreeService) {}
 
   ngOnInit() {
-    // Subscribe to focus changes from the Three.js service
     this.threeService.onFocusChange.subscribe((data) => {
       this.focusedPaper = data;
     });
-    // Set up scroll animation when this component is initialized (i.e., on the Projects page)
-    this.threeService.setupScrollAnimation();
-    // Ensure the scene is in a general view when navigating to the projects page
     this.threeService.returnToGeneralView();
   }
 
   ngOnDestroy() {
-    // Clean up: return to general view and disable scroll when leaving the Projects page
-    this.threeService.returnToGeneralView();
-    this.threeService.disableScrollAnimation();
+    console.log('ProjectsComponent ngOnDestroy called. Initiating Three.js cleanup.');
+
+    // *** IMPORTANT CHANGE HERE: Defer the heavy cleanup to allow route change to complete ***
+    // This pushes the disposal task to the end of the current event loop,
+    // letting Angular's routing finish its work first.
+    setTimeout(() => {
+      this.threeService.stopAnimation();
+      this.threeService.disableScrollAnimation();
+      this.threeService.disposeScene();
+      console.log('Three.js scene disposal deferred and completed.');
+    }, 0); // Defer by 0 milliseconds
   }
 
   @HostListener('window:keydown.escape')

@@ -1,5 +1,3 @@
-// File: .\app\components\projects\projects.component.scss
-// Main container for the "general view" UI elements
 .general-view-ui {
   // Positioning: Full-screen overlay
   position: fixed;
@@ -21,19 +19,18 @@
   opacity: 0;
   transition: opacity 0.8s ease-in-out;
 
-  // By default, the UI should not intercept mouse clicks
+  // *** IMPORTANT CHANGE HERE ***
+  // Keep pointer-events: none by default. This makes its transparent background non-interactive.
   pointer-events: none;
 
   // When the UI is visible, make it opaque
   &.visible {
     opacity: 1;
-    // The general-view-ui's pointer-events are only for the logo.
-    // The tabs-container is now global in app.html and handles its own pointer-events.
-    pointer-events: auto;
+    // No change to pointer-events here. The individual elements within it (like .main-logo)
+    // will manage their own pointer-events if they need to be clickable.
   }
 }
 
-/* Add this new rule for the logo */
 .main-logo {
   // Set a height for the logo. Use a responsive unit or a fixed value.
   // Using clamp() is a great way to make it scale with the screen size.
@@ -44,6 +41,10 @@
 
   // Add some space between the logo and the text below it.
   margin-bottom: 0px;
+
+  // *** IMPORTANT CHANGE HERE ***
+  // Make the logo itself interactive, allowing clicks *on the logo image*.
+  pointer-events: auto;
 }
 
 /* You might want to adjust the main-title styles slightly if needed */

@@ -53,11 +53,13 @@ select {
 
 // Global Navigation Bar Styles
 .tabs-container {
-  position: fixed; /* Changed from absolute to fixed for consistent positioning */
+  position: fixed;
   bottom: 40px;
   left: 50%;
-  transform: translateX(-50%); /* Center horizontally */
-  z-index: 50; /* Ensure it's above the 3D scene but below image previews/back button */
+  transform: translateX(-50%);
+  // *** IMPORTANT CHANGE HERE ***
+  // Ensure it has a very high z-index to always be on top for interaction.
+  z-index: 100;
 
   // Make the tabs themselves clickable
   pointer-events: auto;
