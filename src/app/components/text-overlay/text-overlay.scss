@@ -3,7 +3,7 @@
   top: 50%;
   left: 10%;
   transform: translateY(-50%);
-  max-width: 400px;
+  max-width: 600px;
   width: 30%;
 
   // Give it a height and a glassmorphism background
@@ -53,6 +53,7 @@ h2 {
     font-size: 1.1rem;
     line-height: 1.7;
     margin: 0;
+    white-space: pre-line;
   }
 }
 
@@ -76,7 +77,7 @@ h2 {
 .actions-container {
   margin-top: 10px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .view-button {

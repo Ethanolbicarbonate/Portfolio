@@ -1,8 +1,371 @@
 <!-- File: .\app\components\about-page\about-page.html -->
-<div class="about-page-container">
-  <h2>About My Work</h2>
-  <p>Welcome to my portfolio! I am an artist passionate about digital illustration and 3D design. This interactive experience showcases a selection of my projects, blending traditional art principles with modern digital techniques.</p>
-  <p>Each piece tells a story, exploring themes of nature, human emotion, and abstract concepts. I believe in creating art that not only captivates but also evokes thought and feeling.</p>
-  <p>Thank you for visiting, and I hope you enjoy exploring my creative journey.</p>
-  <p class="contact-info">Feel free to connect with me on social media or via email!</p>
+<div class="about-page-overlay">
+  <div class="about-page-container">
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <div class="profile-image">
+        <div class="image-container">
+          <img
+            src="assets/images/me_icon.png"
+            alt="Ethan Jed Carbonell - Profile Photo"
+            class="profile-photo"
+            loading="lazy"
+          />
+        </div>
+      </div>
+      <h1 class="main-title">ETHAN JED CARBONELL</h1>
+      <p class="subtitle">Digital Artist & Full-Stack Developer</p>
+      <div class="hero-description">
+        <p>Born to draw, forced to code</p>
+      </div>
+    </div>
+
+    <!-- Skills Section -->
+    <div class="skills-section">
+      <h2 class="section-title">Technical Arsenal</h2>
+      <div class="skills-grid">
+        <!-- Art Skills -->
+        <div class="skill-category art-skills">
+          <div class="category-header">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 2L2 7L12 12L22 7L12 2Z"
+                stroke="currentColor"
+                stroke-width="2"
+                fill="none"
+              />
+              <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" />
+              <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" />
+            </svg>
+            <h3>Digital Art</h3>
+          </div>
+          <div class="skill-capsules">
+            <span class="skill-capsule art">Krita</span>
+            <span class="skill-capsule art">Photoshop</span>
+            <span class="skill-capsule art">Lightroom</span>
+            <span class="skill-capsule art">Blender</span>
+            <span class="skill-capsule art">Illustrator</span>
+          </div>
+        </div>
+
+        <!-- Development Skills -->
+        <div class="skill-category dev-skills">
+          <div class="category-header">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <polyline
+                points="16,18 22,12 16,6"
+                stroke="currentColor"
+                stroke-width="2"
+                fill="none"
+              />
+              <polyline points="8,6 2,12 8,18" stroke="currentColor" stroke-width="2" />
+            </svg>
+            <h3>Development</h3>
+          </div>
+          <div class="skill-capsules">
+            <span class="skill-capsule dev">Angular</span>
+            <span class="skill-capsule dev">Three.js</span>
+            <span class="skill-capsule dev">React</span>
+            <span class="skill-capsule dev">TypeScript</span>
+            <span class="skill-capsule dev">GDScript</span>
+            <span class="skill-capsule dev">Node.js</span>
+            <span class="skill-capsule dev">WebGL</span>
+            <span class="skill-capsule dev">SCSS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Grid -->
+    <div class="content-grid">
+      <!-- Creative Vision Card -->
+      <div class="content-card vision-card">
+        <div class="card-icon">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
+            <path d="M12 1V3" stroke="currentColor" stroke-width="2" />
+            <path d="M12 21V23" stroke="currentColor" stroke-width="2" />
+            <path d="M4.22 4.22L5.64 5.64" stroke="currentColor" stroke-width="2" />
+            <path d="M18.36 18.36L19.78 19.78" stroke="currentColor" stroke-width="2" />
+            <path d="M1 12H3" stroke="currentColor" stroke-width="2" />
+            <path d="M21 12H23" stroke="currentColor" stroke-width="2" />
+            <path d="M4.22 19.78L5.64 18.36" stroke="currentColor" stroke-width="2" />
+            <path d="M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2" />
+          </svg>
+        </div>
+        <h3>Creative Vision</h3>
+        <p>
+          As a digital artist, I specialize in creating immersive visual experiences that blend
+          traditional artistic principles with digital techniques. Every piece tells a story through
+          carefully crafted lighting, composition, and emotion.
+        </p>
+      </div>
+
+      <!-- Technical Innovation Card -->
+      <div class="content-card innovation-card">
+        <div class="card-icon">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <polygon
+              points="13,2 3,14 12,14 11,22 21,10 12,10 13,2"
+              stroke="currentColor"
+              stroke-width="2"
+              fill="none"
+            />
+          </svg>
+        </div>
+        <h3>Technical Innovation</h3>
+        <p>
+          My development expertise spans modern web technologies and interactive media. I build
+          performant, scalable applications using Angular, React, and Three.js. (weh)
+        </p>
+      </div>
+
+      <!-- Interactive Experiences Card -->
+      <div class="content-card experience-card">
+        <div class="card-icon">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M2 3H8A4 4 0 0 1 12 7V21A4 4 0 0 0 8 17H2V3Z"
+              stroke="currentColor"
+              stroke-width="2"
+              fill="none"
+            />
+            <path
+              d="M22 3H16A4 4 0 0 0 12 7V21A4 4 0 0 1 16 17H22V3Z"
+              stroke="currentColor"
+              stroke-width="2"
+              fill="none"
+            />
+          </svg>
+        </div>
+        <h3>Interactive Experiences</h3>
+        <p>
+          I specialize in creating immersive 3D web experiences and interactive installations. From
+          WebGL shaders to real-time rendering, I push the boundaries of what's possible in the
+          browser while maintaining artistic integrity.
+        </p>
+      </div>
+
+      <!-- Game Development Card -->
+      <div class="content-card gamedev-card">
+        <div class="card-icon">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect
+              x="2"
+              y="3"
+              width="20"
+              height="14"
+              rx="2"
+              ry="2"
+              stroke="currentColor"
+              stroke-width="2"
+              fill="none"
+            />
+            <circle cx="8" cy="10" r="2" stroke="currentColor" stroke-width="2" />
+            <path d="M16 8L18 10L16 12" stroke="currentColor" stroke-width="2" />
+          </svg>
+        </div>
+        <h3>Game Development</h3>
+        <p>
+          With expertise in GDScript and game engines, I create engaging interactive experiences
+          that combine compelling visuals with smooth gameplay mechanics. From concept art to final
+          implementation, I handle the complete creative pipeline.
+        </p>
+      </div>
+
+      <!-- Creative Process Card -->
+      <div class="content-card process-card">
+        <div class="card-icon">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+            <polyline points="12,6 12,12 16,14" stroke="currentColor" stroke-width="2" />
+          </svg>
+        </div>
+        <h3>Creative Process</h3>
+        <p>
+          My workflow integrates artistic exploration with systematic development practices. I
+          believe in iterative design, user-centered thinking, and the power of collaboration to
+          transform initial concepts into polished digital experiences.
+        </p>
+      </div>
+
+      <!-- Philosophy Card -->
+      <div class="content-card philosophy-card">
+        <div class="card-icon">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 2L3.09 8.26L4 21H20L20.91 8.26L12 2Z"
+              stroke="currentColor"
+              stroke-width="2"
+              fill="none"
+            />
+            <path d="M12 2V22" stroke="currentColor" stroke-width="2" />
+            <path d="M7 8L17 8" stroke="currentColor" stroke-width="2" />
+          </svg>
+        </div>
+        <h3>Design Philosophy</h3>
+        <p>
+          I believe technology should enhance human creativity, not replace it. Every project is an
+          opportunity to explore new possibilities, challenge conventions, and create meaningful
+          connections between users and digital content.
+        </p>
+      </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="contact-section">
+      <div class="contact-card">
+        <h3>Let's Create Together</h3>
+        <p>
+          Ready to bring your vision to life? I'm always excited to collaborate on innovative
+          projects that push creative boundaries.
+        </p>
+        <div class="social-links">
+          <button class="social-link" (click)="onSocialClick('email')">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z"
+                stroke="currentColor"
+                stroke-width="2"
+                fill="none"
+              />
+              <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="2" />
+            </svg>
+            Email
+          </button>
+          <button class="social-link" (click)="onSocialClick('instagram')">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                x="2"
+                y="2"
+                width="20"
+                height="20"
+                rx="5"
+                ry="5"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <path
+                d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37Z"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <path d="M17.5 6.5H17.51" stroke="currentColor" stroke-width="2" />
+            </svg>
+            Instagram
+          </button>
+          <button class="social-link" (click)="onSocialClick('github')">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9 19C4 20.5 4 16.5 2 16M22 16V22H18V16"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <path
+                d="M16 16.5C16 15.8 15.8 15.2 15.4 14.8C18.2 14.5 21 13.4 21 9C21 7.8 20.6 6.7 19.9 5.9C20.1 5.1 20.1 4.1 19.9 3.2C19.9 3.2 18.7 2.9 16 4.8C14.7 4.5 13.3 4.5 12 4.8C9.3 2.9 8.1 3.2 8.1 3.2C7.9 4.1 7.9 5.1 8.1 5.9C7.4 6.7 7 7.8 7 9C7 13.4 9.8 14.5 12.6 14.8C12.2 15.2 12 15.8 12 16.5V19"
+                stroke="currentColor"
+                stroke-width="2"
+                fill="none"
+              />
+            </svg>
+            GitHub
+          </button>
+          <button class="social-link" (click)="onSocialClick('linkedin')">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M16 8A6 6 0 0 1 22 14V21H18V14A2 2 0 0 0 14 14V21H10V9H14V11A6 6 0 0 1 16 8Z"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <rect x="2" y="9" width="4" height="12" stroke="currentColor" stroke-width="2" />
+              <circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="2" />
+            </svg>
+            LinkedIn
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Decorative Elements -->
+    <div class="floating-elements">
+      <div class="floating-dot dot-1"></div>
+      <div class="floating-dot dot-2"></div>
+      <div class="floating-dot dot-3"></div>
+      <div class="floating-dot dot-4"></div>
+      <div class="floating-dot dot-5"></div>
+      <div class="floating-dot dot-6"></div>
+    </div>
+  </div>
 </div>
