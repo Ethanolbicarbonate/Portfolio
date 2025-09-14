@@ -1,34 +1,95 @@
 .text-container {
   position: fixed;
-  
-  // Vertically center the container
   top: 50%;
+  left: 10%;
   transform: translateY(-50%);
+  max-width: 400px;
+  width: 30%;
 
-  // Position it from the left
-  left: 10%; // Or use a fixed value like 100px
-
-  // Set a max-width to prevent text from being too wide
-  max-width: 400px; 
-  width: 30%; // Use a percentage for responsiveness
+  // Give it a height and a glassmorphism background
+  height: 60vh;
+  max-height: 500px;
 
   color: white;
-  text-align: left; // Align text to the left
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
   pointer-events: none;
 
   &.visible {
     opacity: 1;
+    pointer-events: auto; // Allow interaction when visible
   }
+}
 
-  h2 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem; // Add more space below the title
-  }
+// Flexbox container for the content
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+h2 {
+  font-size: 2.5rem;
+  margin: 0 0 15px 0;
+  text-align: left;
+}
+
+.separator {
+  border: none;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.2);
+  width: 100%;
+  margin: 0;
+}
+
+// The scrollable description area
+.description-scroll {
+  flex-grow: 1; // This makes the div take up all available vertical space
+  overflow-y: auto; // The magic for scrolling!
+  margin: 20px 0;
+  padding-right: 15px; // Space for the scrollbar
 
   p {
-    font-size: 1.2rem;
-    line-height: 1.6; // Improve readability for longer descriptions
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin: 0;
+  }
+}
+
+// Styling the scrollbar for a modern look (for Webkit browsers)
+.description-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.description-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+.description-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 4px;
+}
+.description-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+// Container for the button to align it right
+.actions-container {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.view-button {
+  background: transparent;
+  border: solid 1px #ffffff00;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border: solid 1px rgba(255, 255, 255, 0.2);
   }
 }

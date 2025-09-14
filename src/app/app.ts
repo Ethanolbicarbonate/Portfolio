@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 
 import { Scene } from './components/scene/scene';
-import { TextOverlay } from './components/text-overlay/text-overlay';
+import { TextOverlayComponent } from './components/text-overlay/text-overlay';
 
 import { ThreeService } from './services/three.service';
 import { PaperData } from './models/paper-data.model';
@@ -11,12 +11,14 @@ import { PaperData } from './models/paper-data.model';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, Scene, TextOverlay],
+  imports: [CommonModule, RouterOutlet, Scene, TextOverlayComponent],
   templateUrl: './app.html',
   styleUrls: ['./app.scss'],
 })
 export class App implements OnInit {
   focusedPaper: PaperData | null = null;
+  previewImageUrl: string | null = null;
+  isPreviewVisible: boolean = false;
 
   constructor(private threeService: ThreeService) {}
 
@@ -25,12 +27,25 @@ export class App implements OnInit {
       this.focusedPaper = data;
     });
   }
-  @HostListener('window:keydown.escape') // <-- REMOVED ['$event']
+  @HostListener('window:keydown.escape')
   onEscapeKey(): void {
-    // <-- REMOVED the 'event' parameter
     this.returnToGeneralView();
   }
   public returnToGeneralView(): void {
     this.threeService.returnToGeneralView();
+  }
+    public onPreviewImage(imageUrl: string): void {
+    this.previewImageUrl = imageUrl;
+
+    setTimeout(() => {
+      this.isPreviewVisible = true;
+    }, 10); 
+  }
+
+  public closePreview(): void {
+    this.isPreviewVisible = false;
+    setTimeout(() => {
+      this.previewImageUrl = null;
+    }, 500);
   }
 }

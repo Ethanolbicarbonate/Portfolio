@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TextOverlay } from './text-overlay';
+import { TextOverlayComponent } from './text-overlay';
 
 describe('TextOverlay', () => {
-  let component: TextOverlay;
-  let fixture: ComponentFixture<TextOverlay>;
+  let component: TextOverlayComponent;
+  let fixture: ComponentFixture<TextOverlayComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TextOverlay]
+      imports: [TextOverlayComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TextOverlay);
+    fixture = TestBed.createComponent(TextOverlayComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

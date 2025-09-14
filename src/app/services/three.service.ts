@@ -59,6 +59,8 @@ export class ThreeService {
   private scrollThreshold = 100;
   private accumulatedScroll = 0;
 
+  private particleMaterial!: THREE.ShaderMaterial;
+
   constructor(private ngZone: NgZone) {}
 
   public createScene(canvas: ElementRef<HTMLCanvasElement>): void {
@@ -96,6 +98,7 @@ export class ThreeService {
 
     this.setupLighting();
     this.setupPostProcessing();
+    this.createAtmosphericParticles();
   }
 
   private setupPostProcessing(): void {
@@ -303,6 +306,11 @@ export class ThreeService {
 
     // Enhanced paper animations
     this.animatePapers();
+
+    if (this.particleMaterial) {
+      // Access the 'time' uniform using bracket notation
+      this.particleMaterial.uniforms['time'].value = this.animationTime;
+    }
 
     // Update post-processing effects
     this.updatePostProcessing();
@@ -656,5 +664,78 @@ export class ThreeService {
       aperture: targetAperture,
       ease: 'power2.inOut',
     });
+  }
+
+  private createAtmosphericParticles(): void {
+    // --- Tweakable Parameters ---
+    const particleCount = 7000; // How many particles to create
+    const boxSize = 60; // The size of the box they will be distributed in
+
+    const positions = new Float32Array(particleCount * 3);
+    // This array will hold unique animation data for each particle:
+    // x = animation offset, y = animation speed
+    const animationData = new Float32Array(particleCount * 2);
+
+    for (let i = 0; i < particleCount; i++) {
+      // Generate a random position inside a box
+      positions[i * 3 + 0] = (Math.random() - 0.5) * boxSize; // x
+      positions[i * 3 + 1] = (Math.random() - 0.5) * boxSize; // y
+      positions[i * 3 + 2] = (Math.random() - 0.5) * boxSize; // z
+
+      // Generate random animation properties for each particle
+      animationData[i * 2 + 0] = Math.random() * Math.PI * 2; // Random offset (0 to 2PI)
+      animationData[i * 2 + 1] = 0.5 + Math.random() * 0.5; // Random speed (0.5 to 1.0)
+    }
+
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('aAnimationData', new THREE.BufferAttribute(animationData, 2));
+
+    const material = new THREE.PointsMaterial({
+      color: 0xffffff,
+      size: 0.05,
+      transparent: true,
+      blending: THREE.AdditiveBlending, // This makes the particles glow when they overlap
+      depthWrite: false, // Essential for correct transparency rendering
+    });
+
+    // This is where the magic happens! We inject GLSL code into the material.
+    material.onBeforeCompile = (shader) => {
+      // Add a 'time' uniform for animation
+      shader.uniforms['time'] = { value: 0.0 };
+      // Add our custom attribute and a varying to pass data to the fragment shader
+      shader.vertexShader = `
+      attribute vec2 aAnimationData;
+      varying vec2 vAnimationData;
+      ${shader.vertexShader}
+    `.replace(
+        `#include <begin_vertex>`,
+        `#include <begin_vertex>
+      vAnimationData = aAnimationData;`
+      );
+
+      // Animate the opacity in the fragment shader
+      shader.fragmentShader = `
+      uniform float time;
+      varying vec2 vAnimationData;
+      ${shader.fragmentShader}
+    `.replace(
+        `vec4 diffuseColor = vec4( diffuse, opacity );`,
+        `
+      // Calculate a smoothly oscillating value between 0.0 and 1.0
+      float blink = (sin(time * vAnimationData.y + vAnimationData.x) + 1.0) / 2.0;
+      
+      // Make the blinking sharper by using pow()
+      blink = pow(blink, 2.0);
+
+      vec4 diffuseColor = vec4( diffuse, opacity * blink );`
+      );
+
+      // Store a reference to the modified shader uniforms
+      this.particleMaterial = shader as any;
+    };
+
+    const particles = new THREE.Points(geometry, material);
+    this.scene.add(particles);
   }
 }
