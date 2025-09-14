@@ -29,18 +29,35 @@
   }
 }
 
-// The huge main title
+/* Add this new rule for the logo */
+.main-logo {
+  // Set a height for the logo. Use a responsive unit or a fixed value.
+  // Using clamp() is a great way to make it scale with the screen size.
+  height: clamp(100px, 20vw, 300px);
+  
+  // Set width to auto to maintain the SVG's original aspect ratio.
+  width: auto;
+
+  // Add some space between the logo and the text below it.
+  margin-bottom: 0px;
+}
+
+/* You might want to adjust the main-title styles slightly if needed */
 .main-title {
   color: #ffffff;
-  font-family: 'Helvetica Neue', 'Arial', sans-serif; // Choose a clean, bold font
-  font-size: clamp(40px, 10vw, 150px); // Responsive font size
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  font-size: clamp(10px, 8vw, 100px); // Maybe slightly smaller to give the logo room
   font-weight: 700;
   text-align: center;
   line-height: 1.1;
   text-transform: uppercase;
   margin: 0;
-  // A subtle shadow can help readability against a complex 3D background
   text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
+  
+  // We can add this to make the logo and text align perfectly in the center
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 // Container for the navigation tabs at the bottom
@@ -85,41 +102,5 @@
     background: rgba(255, 255, 255, 0.9);
     color: #1a1a1a;
     font-weight: 700;
-  }
-}
-
-.image-preview-container {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 50; // Should be above other UI but can be below modals
-
-  // Sizing and appearance
-  max-width: 90vw;
-  max-height: 80vh;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-
-  // Make it non-interactive so you can still scroll/click through it
-  pointer-events: none;
-
-  // Animation setup
-  opacity: 0;
-  transition: opacity 0.4s ease-in-out;
-
-  &.visible {
-    opacity: 1;
-  }
-
-  img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    max-width: inherit;
-    max-height: inherit;
-    object-fit: contain; // Ensures the whole image is visible without distortion
-    border-radius: 6px; // Slightly smaller radius than the container
   }
 }

@@ -2,16 +2,18 @@
 <app-text-overlay [focusedPaper]="focusedPaper"></app-text-overlay>
 
 <div class="general-view-ui" [class.visible]="!focusedPaper">
-  <h1 class="main-title">
-    Your Name Here <br />
-    <!-- Use a <br> for a nice stacked title -->
-    Creative Portfolio
-  </h1>
+<h1 class="main-title">
+  <img src="assets/images/EJC.svg" alt="EJC Logo" class="main-logo" />
+  
+  <br />
+
+  Creative Portfolio
+</h1>
 
   <nav class="tabs-container">
     <button class="tab-item active">Projects</button>
-    <button class="tab-item">About Me</button>
     <button class="tab-item">Contact</button>
+    <button class="tab-item">About Me</button>
   </nav>
 </div>
 
