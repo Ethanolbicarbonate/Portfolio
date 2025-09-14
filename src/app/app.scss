@@ -33,7 +33,7 @@
 .main-logo {
   // Set a height for the logo. Use a responsive unit or a fixed value.
   // Using clamp() is a great way to make it scale with the screen size.
-  height: clamp(100px, 20vw, 300px);
+  height: clamp(100px, 30vw, 500px);
   
   // Set width to auto to maintain the SVG's original aspect ratio.
   width: auto;

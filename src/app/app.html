@@ -5,8 +5,6 @@
 <div class="general-view-ui" [class.visible]="!focusedPaper">
   <h1 class="main-title">
     <img src="assets/images/EJC.svg" alt="EJC Logo" class="main-logo" />
-    <br />
-    ILLUSTRATIONS
   </h1>
 
   <nav class="tabs-container">
@@ -15,14 +13,17 @@
   </nav>
 </div>
 
-<button *ngIf="focusedPaper" class="back-button" (click)="returnToGeneralView()">&#x21A9;</button>
+@if (focusedPaper) {
+  <button class="back-button" (click)="returnToGeneralView()">&#x21A9;</button>
+}
 
-<div 
-  *ngIf="previewImageUrl" 
-  class="image-preview-overlay"
-  [class.visible]="isPreviewVisible"
-  (click)="closePreview()">
-  
-  <img [src]="previewImageUrl" alt="Full-screen preview of the selected paper" />
+@if (previewImageUrl) {
+  <div
+    class="image-preview-overlay"
+    [class.visible]="isPreviewVisible"
+    (click)="closePreview()">
 
-</div>
+    <img [src]="previewImageUrl" alt="Full-screen preview of the selected paper" />
+
+  </div>
+}

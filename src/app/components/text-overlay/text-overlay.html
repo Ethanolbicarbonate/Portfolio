@@ -1,29 +1,28 @@
-    
 <div class="text-container" [class.visible]="focusedPaper">
-  <div *ngIf="focusedPaper" class="content-wrapper">
-    
-    <!-- Title -->
-    <h2>{{ focusedPaper.title }}</h2>
-    
-    <!-- Thin Line Separator -->
-    <hr class="separator" />
+  @if (focusedPaper) {
+    <div class="content-wrapper">
 
-    <!-- Scrollable Description Area -->
-    <div class="description-scroll">
-      <p>{{ focusedPaper.description }}</p>
+      <!-- Title -->
+      <h2>{{ focusedPaper.title }}</h2>
+
+      <!-- Thin Line Separator -->
+      <hr class="separator" />
+
+      <!-- Scrollable Description Area -->
+      <div class="description-scroll">
+        <p>{{ focusedPaper.description }}</p>
+      </div>
+
+      <!-- Thin Line Separator -->
+      <hr class="separator" />
+
+      <!-- Actions Container (for button alignment) -->
+      <div class="actions-container">
+        <button class="view-button" (click)="onViewClick()">
+          View Illustration
+        </button>
+      </div>
+
     </div>
-
-    <!-- Thin Line Separator -->
-    <hr class="separator" />
-
-    <!-- Actions Container (for button alignment) -->
-    <div class="actions-container">
-      <button class="view-button" (click)="onViewClick()">
-        View Image
-      </button>
-    </div>
-
-  </div>
+  }
 </div>
-
-  
