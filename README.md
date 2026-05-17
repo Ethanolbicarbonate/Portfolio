@@ -22,3 +22,6 @@ It highlights my skills in visual storytelling, technical illustration, and crea
 
 ## 🌐 Open Portfolio in Web
 👉 [View Portfolio](https://ejc-portfolio.vercel.app)
+
+---
+Copyright (c) 2026, Ethan Jed Carbonell. All rights reserved.
