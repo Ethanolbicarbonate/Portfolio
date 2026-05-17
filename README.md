@@ -20,5 +20,5 @@ It highlights my skills in visual storytelling, technical illustration, and crea
 - **Build Tool:** Angular CLI  
 - **Hosting:** Vercel
 
-## 🌐 Live Demo
+## 🌐 Open Portfolio in Web
 👉 [View Portfolio](https://ejc-portfolio.vercel.app)
