@@ -1,5 +1,6 @@
+// File: src/app/components/illustrations/illustrations.component.scss
+
 .general-view-ui {
-  // Positioning: Full-screen overlay
   position: fixed;
   top: 0;
   left: 0;
@@ -7,50 +8,32 @@
   height: 100%;
   z-index: 10;
 
-  // Flexbox layout to position the title and tabs
   display: flex;
   flex-direction: column;
-  justify-content: center; // Vertically center the title
-  align-items: center; // Horizontally center everything
+  justify-content: center;
+  align-items: center;
   padding: 50px;
   box-sizing: border-box;
 
-  // Animation: Control visibility and fade
   opacity: 0;
   transition: opacity 0.8s ease-in-out;
-
-  // *** IMPORTANT CHANGE HERE ***
-  // Keep pointer-events: none by default. This makes its transparent background non-interactive.
   pointer-events: none;
 
-  // When the UI is visible, make it opaque
   &.visible {
     opacity: 1;
-    // No change to pointer-events here. The individual elements within it (like .main-logo)
-    // will manage their own pointer-events if they need to be clickable.
   }
 }
 
 .main-logo {
-  // Set a height for the logo. Use a responsive unit or a fixed value.
-  // Using clamp() is a great way to make it scale with the screen size.
   height: clamp(100px, 30vw, 500px);
-
-  // Set width to auto to maintain the SVG's original aspect ratio.
   width: auto;
-
-  // Add some space between the logo and the text below it.
   margin-bottom: 0px;
-
-  // *** IMPORTANT CHANGE HERE ***
-  // Make the logo itself interactive, allowing clicks *on the logo image*.
   pointer-events: auto;
 }
 
-/* You might want to adjust the main-title styles slightly if needed */
 .main-title {
   color: #ffffff;
-  font-size: clamp(10px, 8vw, 100px); // Maybe slightly smaller to give the logo room
+  font-size: clamp(10px, 8vw, 100px);
   font-weight: 700;
   text-align: center;
   line-height: 1.1;
@@ -58,14 +41,10 @@
   margin: 0;
   text-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
 
-  // We can add this to make the logo and text align perfectly in the center
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
-// REMOVED .tabs-container and .tab-item styles from here.
-// They are moved to styles.scss to be global.
 
 .back-button {
   position: fixed;
@@ -73,7 +52,6 @@
   right: 30px;
   z-index: 100;
 
-  // Styling
   background-color: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.3);
   color: white;
@@ -83,14 +61,12 @@
   border-radius: 50%;
   cursor: pointer;
   backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px); // For Safari
+  -webkit-backdrop-filter: blur(10px);
 
-  // Center the icon inside
   display: flex;
   align-items: center;
   justify-content: center;
 
-  // Transitions
   transition: background-color 0.3s ease, transform 0.3s ease;
 
   &:hover {

@@ -1,3 +1,5 @@
+// File: src/app/components/scene/scene.ts
+// PHASE 0 — no structural changes needed here; ThreeService handles everything.
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { ThreeService } from '../../services/three.service';
 import { PaperData } from '../../models/paper-data.model';
@@ -112,15 +114,13 @@ export class Scene implements OnInit, AfterViewInit, OnDestroy {
       this.threeService.createScene(this.canvasRef);
       this.threeService.addPapers(this.papers);
       this.threeService.animate();
-      this.threeService.setupScrollAnimation(); // Moved here
+      this.threeService.setupScrollAnimation();
     } else {
       console.error('Canvas element not found for Three.js scene.');
     }
   }
+
   ngOnDestroy(): void {
-    console.log('Scene component ngOnDestroy called. Three.js service handles full disposal.');
-    // The ThreeService instance is providedIn: 'root', so it lives longer than this component.
-    // The ProjectsComponent's ngOnDestroy now explicitly calls disposeScene on the service.
-    // This ngOnDestroy here mostly serves as a confirmation log.
+    // Full disposal is handled by ProjectsComponent.ngOnDestroy via ThreeService.
   }
 }

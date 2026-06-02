@@ -1,4 +1,4 @@
-<!-- File: .\app\components\projects\projects.component.html -->
+<!-- File: src/app/components/illustrations/illustrations.component.html -->
 <app-scene></app-scene>
 <app-text-overlay [focusedPaper]="focusedPaper" (viewImage)="onPreviewImage($event)">
 </app-text-overlay>
@@ -7,7 +7,6 @@
   <h1 class="main-title">
     <img src="assets/images/EJC.svg" alt="EJC Logo" class="main-logo" />
   </h1>
-  <!-- The tabs-container was here, now it's moved to app.html -->
 </div>
 
 @if (focusedPaper) {
@@ -19,8 +18,6 @@
     class="image-preview-overlay"
     [class.visible]="isPreviewVisible"
     (click)="closePreview()">
-
-    <img [src]="previewImageUrl" alt="Full-screen preview of the selected paper" />
-
+    <img [src]="previewImageUrl" alt="Full-screen preview of the selected illustration" />
   </div>
 }

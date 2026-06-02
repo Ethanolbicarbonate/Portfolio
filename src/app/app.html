@@ -1,10 +1,9 @@
-<!-- File: .\app\app.html -->
+<!-- File: src/app/app.html -->
 <div [@routeAnimations]="o.activatedRouteData['animation']">
   <router-outlet #o="outlet"></router-outlet>
 </div>
 
-<!-- Navigation bar moved here to be globally available -->
 <nav class="tabs-container">
-  <button class="tab-item" routerLink="/projects" routerLinkActive="active">Projects</button>
+  <button class="tab-item" routerLink="/illustrations" routerLinkActive="active">Illustrations</button>
   <button class="tab-item" routerLink="/about" routerLinkActive="active">About</button>
 </nav>

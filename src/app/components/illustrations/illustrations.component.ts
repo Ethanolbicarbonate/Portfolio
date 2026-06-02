@@ -1,5 +1,5 @@
-// File: .\app\components\projects\projects.component.ts
-import { Component, OnInit, OnDestroy, HostListener, ElementRef, ViewChild } from '@angular/core';
+// File: src/app/components/illustrations/illustrations.component.ts
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { Scene } from '../scene/scene';
@@ -8,15 +8,13 @@ import { ThreeService } from '../../services/three.service';
 import { PaperData } from '../../models/paper-data.model';
 
 @Component({
-  selector: 'app-projects',
+  selector: 'app-illustrations',
   standalone: true,
   imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, Scene, TextOverlayComponent],
-  templateUrl: './projects.component.html',
-  styleUrls: ['./projects.component.scss']
+  templateUrl: './illustrations.component.html',
+  styleUrls: ['./illustrations.component.scss']
 })
-export class ProjectsComponent implements OnInit, OnDestroy {
-  @ViewChild(Scene) private threeSceneComponent!: Scene;
-
+export class IllustrationsComponent implements OnInit, OnDestroy {
   focusedPaper: PaperData | null = null;
   previewImageUrl: string | null = null;
   isPreviewVisible: boolean = false;
@@ -31,17 +29,11 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log('ProjectsComponent ngOnDestroy called. Initiating Three.js cleanup.');
-
-    // *** IMPORTANT CHANGE HERE: Defer the heavy cleanup to allow route change to complete ***
-    // This pushes the disposal task to the end of the current event loop,
-    // letting Angular's routing finish its work first.
     setTimeout(() => {
       this.threeService.stopAnimation();
       this.threeService.disableScrollAnimation();
       this.threeService.disposeScene();
-      console.log('Three.js scene disposal deferred and completed.');
-    }, 0); // Defer by 0 milliseconds
+    }, 0);
   }
 
   @HostListener('window:keydown.escape')
