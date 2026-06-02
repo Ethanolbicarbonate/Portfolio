@@ -3,21 +3,51 @@
 <app-text-overlay [focusedPaper]="focusedPaper" (viewImage)="onPreviewImage($event)">
 </app-text-overlay>
 
+<!-- General view logo -->
 <div class="general-view-ui" [class.visible]="!focusedPaper">
   <h1 class="main-title">
     <img src="assets/images/EJC.svg" alt="EJC Logo" class="main-logo" />
   </h1>
 </div>
 
+<!-- -----------------------------------------------------------------------
+     Vertical pagination dot rail
+     Appears on the right side of the screen when an illustration is focused.
+     Each dot corresponds to one illustration; the active dot is filled.
+     -------------------------------------------------------------------- -->
+<nav
+  class="pagination-rail"
+  [class.visible]="dotsVisible"
+  aria-label="Illustration navigation">
+
+  @for (i of dotIndices; track i) {
+    <button
+      class="pagination-dot"
+      [class.active]="i === activeDotIndex"
+      (click)="onDotClick(i)"
+      [attr.aria-label]="'Go to illustration ' + (i + 1)"
+      [attr.aria-current]="i === activeDotIndex ? 'true' : null">
+    </button>
+  }
+
+</nav>
+
+<!-- Back button (shown when an illustration is focused) -->
 @if (focusedPaper) {
-  <button class="back-button" (click)="returnToGeneralView()">&#x21A9;</button>
+  <button class="back-button" (click)="returnToGeneralView()" aria-label="Return to overview">
+    &#x21A9;
+  </button>
 }
 
+<!-- Full-screen image preview overlay -->
 @if (previewImageUrl) {
   <div
     class="image-preview-overlay"
     [class.visible]="isPreviewVisible"
-    (click)="closePreview()">
+    (click)="closePreview()"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Full-screen illustration preview">
     <img [src]="previewImageUrl" alt="Full-screen preview of the selected illustration" />
   </div>
 }
