@@ -24,10 +24,7 @@ import { PROCESS_DATA } from '../../data/process-data';
   selector: 'app-illustrations',
   standalone: true,
   imports: [
-    CommonModule, 
-    RouterOutlet, 
-    RouterLink, 
-    RouterLinkActive, 
+    CommonModule,
     Scene, 
     TextOverlayComponent, 
     ProcessSectionComponent
