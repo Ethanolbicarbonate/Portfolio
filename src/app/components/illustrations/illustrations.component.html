@@ -41,18 +41,11 @@
 }
 
 <!-- Full-screen image preview overlay -->
-@if (previewImageUrl) {
-  <div
-    class="image-preview-overlay"
-    [class.visible]="isPreviewVisible"
-    (click)="closePreview()"
-    role="dialog"
-    aria-modal="true"
-    aria-label="Full-screen illustration preview"
-  >
-    <img [src]="previewImageUrl" alt="Full-screen preview of the selected illustration" />
-  </div>
-}
+<app-image-preview 
+  [imageUrl]="previewImageUrl" 
+  [isVisible]="isPreviewVisible" 
+  (close)="closePreview()">
+</app-image-preview>
 
 <!-- Phase 1 Refactor: The injected Process Section Component -->
 <!-- Notice we removed id="process-section" here so it doesn't conflict with the one inside the component -->

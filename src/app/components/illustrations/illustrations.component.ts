@@ -4,7 +4,7 @@ import {
   OnDestroy,
   HostListener,
   NgZone,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
@@ -19,21 +19,16 @@ import { PaperData } from '../../models/paper-data.model';
 import { ProcessSectionComponent } from '../process-section/process-section.component';
 import { ProcessProject } from '../../models/process-data.model';
 import { PROCESS_DATA } from '../../data/process-data';
+import { ImagePreviewComponent } from '../image-preview/image-preview.component';
 
 @Component({
   selector: 'app-illustrations',
   standalone: true,
-  imports: [
-    CommonModule,
-    Scene, 
-    TextOverlayComponent, 
-    ProcessSectionComponent
-  ],
+  imports: [CommonModule, Scene, TextOverlayComponent, ProcessSectionComponent, ImagePreviewComponent],
   templateUrl: './illustrations.component.html',
   styleUrls: ['./illustrations.component.scss'],
 })
 export class IllustrationsComponent implements OnInit, OnDestroy {
-  
   focusedPaper: PaperData | null = null;
   previewImageUrl: string | null = null;
   isPreviewVisible: boolean = false;
@@ -43,7 +38,7 @@ export class IllustrationsComponent implements OnInit, OnDestroy {
   dotsVisible: boolean = false;
   readonly dotIndices: number[] = Array.from({ length: this.totalIllustrations }, (_, i) => i);
   isAtTop: boolean = true;
-  
+
   private focusSub!: Subscription;
   private processScrollSub!: Subscription;
 
