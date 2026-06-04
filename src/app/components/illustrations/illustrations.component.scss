@@ -265,12 +265,10 @@
 }
 
 // ============================================================================
-// Phase 3: Process Section Layout & Spacer
+// Phase 4: Process Section Layout & Components
 // ============================================================================
 
 .hero-spacer {
-  // Pushes the process section below the fold, acting as an invisible
-  // window to the fixed 3D canvas underneath
   height: 100vh;
   width: 100%;
   pointer-events: none;
@@ -278,35 +276,260 @@
 
 .process-section {
   position: relative;
-  z-index: 50; // Sits above the 3D canvas but below fixed UI navigation
+  z-index: 50; 
   min-height: 100vh;
   
-  // Phase 3 aesthetic baseline (will be polished in Phase 4)
-  background: rgba(6, 17, 26, 0.98); // Almost solid dark match
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  // Section background styling
+  background: rgba(6, 17, 26, 0.98); 
   border-top: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
-  
   padding: 100px 40px;
   color: white;
+  
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: flex-start; // Allows natural scrolling height
+  overflow: hidden; // Keeps canvas and content contained
+}
 
-  .process-scaffold {
-    text-align: center;
-    opacity: 0.5;
+// Background Canvas
+.process-bg-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0; // Behind content
+  pointer-events: none; // Don't block clicks
+}
 
-    h2 {
-      font-size: 2.5rem;
-      margin: 0 0 10px 0;
+// Content Container
+.process-content {
+  position: relative;
+  z-index: 10;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+// Hero Area
+.process-hero {
+  margin-bottom: 80px;
+  text-align: center;
+
+  .project-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    margin: 0 0 20px;
+    background: linear-gradient(135deg, #fff, rgba(255,255,255,0.7));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+  }
+
+  .tags {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 40px;
+
+    .tag {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      letter-spacing: 0.5px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+  }
+
+  .hero-image-wrapper {
+    width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+      max-height: 60vh;
+    }
+  }
+
+  .project-desc {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.8);
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+}
+
+// Split Layout Carousel
+.process-steps {
+  display: flex;
+  gap: 60px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 30px;
+  padding: 50px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+    padding: 30px;
+    gap: 40px;
+  }
+
+  // Left: 40%
+  .step-info {
+    flex: 0 0 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .step-counter {
+      font-family: monospace;
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      color: rgba(255, 255, 255, 0.5);
+
+      .current-num {
+        font-size: 2rem;
+        color: white;
+        font-weight: bold;
+      }
+    }
+
+    .step-title {
+      font-size: 2rem;
+      margin: 0 0 40px 0;
+      font-weight: 600;
+      line-height: 1.2;
       letter-spacing: -0.5px;
     }
 
-    p {
-      font-size: 1.2rem;
-      font-weight: 300;
+    .step-controls {
+      display: flex;
+      gap: 15px;
+      margin-top: auto; 
+      
+      @media (max-width: 900px) {
+        margin-top: 0;
+      }
+
+      .nav-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: inherit;
+
+        &:hover:not(:disabled) {
+          background: rgba(255, 255, 255, 0.2);
+          transform: translateY(-2px);
+        }
+
+        &:disabled {
+          opacity: 0.3;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+
+  // Right: 60%
+  .step-visuals {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    
+    .carousel-image-wrapper {
+      width: 100%;
+      border-radius: 15px;
+      overflow: hidden;
+      margin-bottom: 25px;
+      background: rgba(0, 0, 0, 0.3);
+      aspect-ratio: 16 / 9; // Keeps layout stable during transitions
+
+      .carousel-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain; // Change to 'cover' if you want a filled box
+        display: block;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+
+        &.fade-in {
+          opacity: 1;
+        }
+      }
+    }
+
+    .caption-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+
+      @media (max-width: 600px) {
+        flex-direction: column;
+      }
+
+      .step-caption {
+        margin: 0;
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.6;
+        flex: 1;
+        opacity: 0;
+        transform: translateY(10px);
+        transition: all 0.5s ease;
+
+        &.fade-in {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .step-dots {
+        display: flex;
+        gap: 8px;
+        margin-top: 5px;
+
+        .carousel-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.2);
+          border: none;
+          cursor: pointer;
+          padding: 0;
+          transition: all 0.3s;
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.5);
+          }
+
+          &.active {
+            background: white;
+            transform: scale(1.3);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+          }
+        }
+      }
     }
   }
 }

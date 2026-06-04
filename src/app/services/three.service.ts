@@ -85,6 +85,7 @@ export class ThreeService implements OnDestroy {
   private scrollThreshold = 100;
   private accumulatedScroll = 0;
   private wheelEventHandler: ((event: WheelEvent) => void) | null = null;
+  public onScrollToProcess = new Subject<void>();
 
   // -------------------------------------------------------------------------
   // Particles — store the ShaderMaterial uniforms ref directly instead of
@@ -680,13 +681,11 @@ export class ThreeService implements OnDestroy {
       // Scrolled up past the first item
       this.returnToGeneralView();
     } else if (newIndex >= this.papers.length) {
-      // PHASE 3: Scrolled down past the last item -> glide down to Process Section!
-      const processSection = document.getElementById('process-section');
-      if (processSection) {
-        processSection.scrollIntoView({ behavior: 'smooth' });
-      }
+      // EXACTLY AT THE END - Tell the component to unlock and scroll
+      this.onScrollToProcess.next();
     }
   }
+
   public returnToGeneralView(): void {
     if (this.currentFocusIndex === -1) return;
 
