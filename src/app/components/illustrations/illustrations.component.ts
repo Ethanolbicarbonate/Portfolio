@@ -4,7 +4,7 @@ import {
   OnDestroy,
   HostListener,
   NgZone,
-  ChangeDetectorRef,
+  ChangeDetectorRef
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
@@ -15,75 +15,45 @@ import { TextOverlayComponent } from '../text-overlay/text-overlay';
 import { ThreeService } from '../../services/three.service';
 import { PaperData } from '../../models/paper-data.model';
 
-// Import the new ProcessSectionComponent and its interface
-import {
-  ProcessSectionComponent,
-  ProcessProject,
-} from '../process-section/process-section.component';
+// Use the isolated Data and Component
+import { ProcessSectionComponent } from '../process-section/process-section.component';
+import { ProcessProject } from '../../models/process-data.model';
+import { PROCESS_DATA } from '../../data/process-data';
 
 @Component({
   selector: 'app-illustrations',
   standalone: true,
   imports: [
-    CommonModule,
-    Scene,
-    TextOverlayComponent,
-    ProcessSectionComponent, // <-- Injected new standalone component here
+    CommonModule, 
+    RouterOutlet, 
+    RouterLink, 
+    RouterLinkActive, 
+    Scene, 
+    TextOverlayComponent, 
+    ProcessSectionComponent
   ],
   templateUrl: './illustrations.component.html',
   styleUrls: ['./illustrations.component.scss'],
 })
 export class IllustrationsComponent implements OnInit, OnDestroy {
+  
   focusedPaper: PaperData | null = null;
   previewImageUrl: string | null = null;
   isPreviewVisible: boolean = false;
 
-  // Pagination & Scroll state
   readonly totalIllustrations = 11;
   activeDotIndex: number = -1;
   dotsVisible: boolean = false;
   readonly dotIndices: number[] = Array.from({ length: this.totalIllustrations }, (_, i) => i);
   isAtTop: boolean = true;
-
+  
   private focusSub!: Subscription;
   private processScrollSub!: Subscription;
 
   // -------------------------------------------------------------------------
-  // Process Section Data (Will be isolated entirely in Phase 2)
+  // Clean! Data is now pulled from the isolated data file
   // -------------------------------------------------------------------------
-  public processData: ProcessProject = {
-    title: 'The Making of: When Pens Wander',
-    heroImage: 'assets/images/image1.png',
-    description:
-      'A deep dive into the creation of "When Pens Wander", from the initial scribbles and concept ideation to the final rendered masterpiece. This project heavily focused on balancing lighting and visual storytelling to bring the journey to life.',
-    tags: ['Digital Art', 'Photoshop', '2024'],
-    steps: [
-      {
-        title: 'Initial Concept & Sketch',
-        image: 'assets/images/image2.png',
-        caption:
-          'The core idea was established with loose lines, focusing purely on composition, character weight, and the overall dynamic of the scene.',
-      },
-      {
-        title: 'Line Art & Definition',
-        image: 'assets/images/image4.png',
-        caption:
-          'Refining the shapes and establishing clear boundaries for the character and the massive pen strapped to her back.',
-      },
-      {
-        title: 'Base Colors & Mood',
-        image: 'assets/images/image8.png',
-        caption:
-          'Blocking in the foundational colors to set the atmospheric tone before adding complex volumetric lighting.',
-      },
-      {
-        title: 'Final Lighting & Render',
-        image: 'assets/images/image1.png',
-        caption:
-          'Adding rim lights, volumetric glow, pushing the final contrast, and rendering textures to make the entire composition pop.',
-      },
-    ],
-  };
+  public processData: ProcessProject = PROCESS_DATA;
 
   constructor(
     private threeService: ThreeService,

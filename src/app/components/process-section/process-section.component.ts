@@ -1,30 +1,9 @@
-import {
-  Component,
-  ElementRef,
-  ViewChild,
-  AfterViewInit,
-  OnDestroy,
-  NgZone,
-  ChangeDetectorRef,
-  Input,
-} from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, NgZone, ChangeDetectorRef, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import * as THREE from 'three';
 
-// Temporarily keeping interfaces here until Phase 2
-export interface ProcessStep {
-  title: string;
-  image: string;
-  caption: string;
-}
-
-export interface ProcessProject {
-  title: string;
-  heroImage: string;
-  description: string;
-  tags: string[];
-  steps: ProcessStep[];
-}
+// Import the newly created interfaces
+import { ProcessProject, ProcessStep } from '../../models/process-data.model';
 
 @Component({
   selector: 'app-process-section',
