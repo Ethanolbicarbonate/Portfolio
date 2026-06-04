@@ -1,3 +1,4 @@
+// File: src/app/components/process-section/process-section.component.ts
 import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, NgZone, ChangeDetectorRef, Input } from '@angular/core';
 import TIMEOUTS from '../../utils/timeouts';
 import { CommonModule } from '@angular/common';
@@ -62,14 +63,17 @@ export class ProcessSectionComponent implements AfterViewInit, OnDestroy {
 
   public setStep(index: number): void {
     if (index === this.currentStepIndex) return;
+    
+    // Hide current
     this.fadeTrigger = false;
     this.cdr.detectChanges();
 
+    // Use a slightly longer timeout to match the new cinematic CSS transitions
     setTimeout(() => {
       this.currentStepIndex = index;
       this.fadeTrigger = true;
       this.cdr.detectChanges();
-    }, TIMEOUTS.TRANSITION_SHORT);
+    }, 400); // 400ms feels smooth and cinematic for hiding the old image
   }
 
   // --- Three.js Logic ---

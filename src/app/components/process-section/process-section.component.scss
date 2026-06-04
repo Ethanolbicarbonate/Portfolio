@@ -1,6 +1,4 @@
-// ============================================================================
-// Phase 4: Process Section Layout & Components
-// ============================================================================
+// File: src/app/components/process-section/process-section.component.scss
 
 .hero-spacer {
   height: 100vh;
@@ -12,258 +10,372 @@
   position: relative;
   z-index: 50;
   min-height: 100vh;
-
-  // Section background styling
-  background: rgba(6, 17, 26, 0.98);
+  background: #040b11; // Deeper background
   border-top: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
-  padding: 100px 40px;
+  box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.8);
+  padding: 120px 5%;
   color: white;
-
-  display: flex;
-  justify-content: center;
-  align-items: flex-start; // Allows natural scrolling height
-  overflow: hidden; // Keeps canvas and content contained
+  overflow: hidden;
 }
 
-// Background Canvas
+// ============================================================================
+// Backgrounds & Ambiance
+// ============================================================================
 .process-bg-canvas {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 0; // Behind content
-  pointer-events: none; // Don't block clicks
+  z-index: 0;
+  pointer-events: none;
 }
 
-// Content Container
+.ambient-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.4;
+
+  &.glow-1 {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(138,180,248,0.15) 0%, transparent 70%);
+    top: -100px;
+    right: -100px;
+  }
+
+  &.glow-2 {
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(255,196,46,0.08) 0%, transparent 70%);
+    bottom: -200px;
+    left: -200px;
+  }
+}
+
 .process-content {
   position: relative;
   z-index: 10;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   width: 100%;
 }
 
-// Hero Area
-.process-hero {
-  margin-bottom: 80px;
-  text-align: center;
+// ============================================================================
+// Asymmetrical Hero Grid
+// ============================================================================
+.process-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 80px;
+  align-items: center;
+  margin-bottom: 120px;
 
-  .project-title {
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    font-weight: 700;
-    margin: 0 0 20px;
-    background: linear-gradient(135deg, #fff, rgba(255, 255, 255, 0.7));
-    background-clip: text; /* standard property for compatibility */
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: -1px;
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+    gap: 50px;
   }
 
-  .tags {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 40px;
+  .hero-text {
+    .badge {
+      display: inline-block;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #8ab4f8;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(138, 180, 248, 0.4);
+      padding-bottom: 5px;
+    }
 
-    .tag {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      padding: 6px 16px;
-      border-radius: 20px;
-      font-size: 0.9rem;
-      letter-spacing: 0.5px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+    .project-title {
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin: 0 0 30px;
+      background: linear-gradient(135deg, #ffffff 30%, rgba(255, 255, 255, 0.4) 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -2px;
+    }
+
+    .project-desc {
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.8;
+      margin-bottom: 40px;
+      font-weight: 300;
+      max-width: 90%;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+
+      .tag {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 8px 20px;
+        border-radius: 30px;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.1);
+          border-color: rgba(255, 255, 255, 0.3);
+          transform: translateY(-2px);
+        }
+      }
     }
   }
 
-  .hero-image-wrapper {
-    width: 100%;
-    border-radius: 20px;
-    overflow: hidden;
-    margin-bottom: 30px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-
-    img {
+  .hero-visual {
+    position: relative;
+    
+    .hero-image-wrapper {
+      position: relative;
       width: 100%;
-      height: auto;
-      display: block;
-      object-fit: cover;
-      max-height: 60vh;
-    }
-  }
+      border-radius: 30px;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+      transform: perspective(1000px) rotateY(-5deg) rotateX(2deg);
+      transition: transform 0.5s ease;
 
-  .project-desc {
-    font-size: 1.2rem;
-    color: rgba(255, 255, 255, 0.8);
-    max-width: 800px;
-    margin: 0 auto;
-    line-height: 1.6;
-    font-weight: 300;
+      &:hover {
+        transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+      }
+
+      img {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: cover;
+        transform: scale(1.02);
+      }
+
+      .overlay-gradient {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to right,
+          rgba(4, 11, 17, 0.4) 0%,
+          transparent 40%,
+          transparent 100%
+        );
+        pointer-events: none;
+      }
+    }
   }
 }
 
-// Split Layout Carousel
-.process-steps {
+// ============================================================================
+// Cinematic Process Showcase
+// ============================================================================
+.process-showcase {
   display: flex;
-  gap: 60px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  flex-direction: column;
+  gap: 30px;
+}
+
+.showcase-visuals {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 7;
   border-radius: 30px;
-  padding: 50px;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 
-  @media (max-width: 900px) {
-    flex-direction: column;
-    padding: 30px;
-    gap: 40px;
+  @media (max-width: 1024px) {
+    aspect-ratio: 16 / 10;
   }
-
-  // Left: 40%
-  .step-info {
-    flex: 0 0 35%;
+  @media (max-width: 768px) {
+    aspect-ratio: auto;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    background: transparent;
+    border: none;
+  }
 
-    .step-counter {
-      font-family: monospace;
-      font-size: 1.2rem;
-      margin-bottom: 15px;
-      color: rgba(255, 255, 255, 0.5);
+  .showcase-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(1.05);
+    transition: opacity 0.8s ease, transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
 
-      .current-num {
-        font-size: 2rem;
-        color: white;
+    &.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    @media (max-width: 768px) {
+      border-radius: 20px;
+      aspect-ratio: 4/3;
+    }
+  }
+
+  .floating-step-card {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    width: 420px;
+    background: rgba(10, 15, 22, 0.65);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 40px;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease 0.2s, transform 0.6s cubic-bezier(0.25, 1, 0.5, 1) 0.2s;
+
+    &.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      position: relative;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      margin-top: 20px;
+      padding: 30px;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+
+      .step-num {
+        font-family: monospace;
+        font-size: 1.2rem;
+        color: #8ab4f8;
         font-weight: bold;
+      }
+
+      .step-line {
+        height: 1px;
+        flex: 1;
+        background: linear-gradient(90deg, rgba(255,255,255,0.2), transparent);
       }
     }
 
     .step-title {
-      font-size: 2rem;
-      margin: 0 0 40px 0;
-      font-weight: 600;
-      line-height: 1.2;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 0 0 15px 0;
       letter-spacing: -0.5px;
     }
 
-    .step-controls {
-      display: flex;
-      gap: 15px;
-      margin-top: auto;
+    .step-caption {
+      margin: 0;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 300;
+    }
+  }
+}
 
-      @media (max-width: 900px) {
-        margin-top: 0;
-      }
+// ============================================================================
+// Modern Navigation
+// ============================================================================
+.showcase-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  padding: 10px 20px;
 
-      .nav-btn {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: white;
-        padding: 10px 20px;
-        border-radius: 30px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-family: inherit;
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 0;
+  }
 
-        &:hover:not(:disabled) {
-          background: rgba(255, 255, 255, 0.2);
-          transform: translateY(-2px);
-        }
+  .nav-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: monospace;
+    font-size: 1.1rem;
 
-        &:disabled {
-          opacity: 0.3;
-          cursor: not-allowed;
-        }
-      }
+    .current { color: white; font-weight: bold; }
+    .divider { color: rgba(255, 255, 255, 0.3); }
+    .total { color: rgba(255, 255, 255, 0.5); }
+  }
+
+  .progress-track {
+    flex: 1;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+
+    @media (max-width: 768px) {
+      order: 3;
+      min-width: 100%;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #8ab4f8;
+      border-radius: 4px;
+      transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+      box-shadow: 0 0 10px rgba(138, 180, 248, 0.5);
     }
   }
 
-  // Right: 60%
-  .step-visuals {
-    flex: 1;
+  .nav-controls {
     display: flex;
-    flex-direction: column;
+    gap: 12px;
 
-    .carousel-image-wrapper {
-      width: 100%;
-      border-radius: 15px;
-      overflow: hidden;
-      margin-bottom: 25px;
-      background: rgba(0, 0, 0, 0.3);
-      aspect-ratio: 16 / 9; // Keeps layout stable during transitions
-
-      .carousel-image {
-        width: 100%;
-        height: 100%;
-        object-fit: contain; // Change to 'cover' if you want a filled box
-        display: block;
-        opacity: 0;
-        transition: opacity 0.5s ease;
-
-        &.fade-in {
-          opacity: 1;
-        }
-      }
-    }
-
-    .caption-container {
+    .icon-btn {
       display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 20px;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
 
-      @media (max-width: 600px) {
-        flex-direction: column;
+      svg {
+        transition: transform 0.3s ease;
       }
 
-      .step-caption {
-        margin: 0;
-        font-size: 1rem;
-        color: rgba(255, 255, 255, 0.7);
-        line-height: 1.6;
-        flex: 1;
-        opacity: 0;
-        transform: translateY(10px);
-        transition: all 0.5s ease;
-
-        &.fade-in {
-          opacity: 1;
-          transform: translateY(0);
-        }
+      &:hover:not(:disabled) {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.3);
+        transform: scale(1.05);
       }
 
-      .step-dots {
-        display: flex;
-        gap: 8px;
-        margin-top: 5px;
+      &:active:not(:disabled) {
+        transform: scale(0.95);
+      }
 
-        .carousel-dot {
-          width: 10px;
-          height: 10px;
-          border-radius: 50%;
-          background: rgba(255, 255, 255, 0.2);
-          border: none;
-          cursor: pointer;
-          padding: 0;
-          transition: all 0.3s;
-
-          &:hover {
-            background: rgba(255, 255, 255, 0.5);
-          }
-
-          &.active {
-            background: white;
-            transform: scale(1.3);
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-          }
-        }
+      &:disabled {
+        opacity: 0.2;
+        cursor: not-allowed;
       }
     }
   }
