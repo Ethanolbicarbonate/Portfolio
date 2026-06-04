@@ -10,16 +10,16 @@
 
 .process-section {
   position: relative;
-  z-index: 50; 
+  z-index: 50;
   min-height: 100vh;
-  
+
   // Section background styling
-  background: rgba(6, 17, 26, 0.98); 
+  background: rgba(6, 17, 26, 0.98);
   border-top: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
   padding: 100px 40px;
   color: white;
-  
+
   display: flex;
   justify-content: center;
   align-items: flex-start; // Allows natural scrolling height
@@ -55,7 +55,8 @@
     font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 700;
     margin: 0 0 20px;
-    background: linear-gradient(135deg, #fff, rgba(255,255,255,0.7));
+    background: linear-gradient(135deg, #fff, rgba(255, 255, 255, 0.7));
+    background-clip: text; /* standard property for compatibility */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     letter-spacing: -1px;
@@ -155,8 +156,8 @@
     .step-controls {
       display: flex;
       gap: 15px;
-      margin-top: auto; 
-      
+      margin-top: auto;
+
       @media (max-width: 900px) {
         margin-top: 0;
       }
@@ -189,7 +190,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    
+
     .carousel-image-wrapper {
       width: 100%;
       border-radius: 15px;

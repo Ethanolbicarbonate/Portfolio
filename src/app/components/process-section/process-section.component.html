@@ -29,12 +29,16 @@
           <span class="total-num"> / 0{{ processData.steps.length }}</span>
         </div>
         <h3 class="step-title">{{ currentStep.title }}</h3>
-        
+
         <div class="step-controls">
           <button class="nav-btn" (click)="prevStep()" [disabled]="currentStepIndex === 0">
             &larr; Prev
           </button>
-          <button class="nav-btn" (click)="nextStep()" [disabled]="currentStepIndex === processData.steps.length - 1">
+          <button
+            class="nav-btn"
+            (click)="nextStep()"
+            [disabled]="currentStepIndex === processData.steps.length - 1"
+          >
             Next &rarr;
           </button>
         </div>
@@ -43,26 +47,26 @@
       <!-- Right: Visuals & Caption -->
       <div class="step-visuals">
         <div class="carousel-image-wrapper">
-          <img 
-            [src]="currentStep.image" 
-            alt="Process step visual" 
-            class="carousel-image" 
-            [class.fade-in]="fadeTrigger" 
+          <img
+            [src]="currentStep.image"
+            alt="Process step visual"
+            class="carousel-image"
+            [class.fade-in]="fadeTrigger"
           />
         </div>
-        
+
         <div class="caption-container">
           <p class="step-caption" [class.fade-in]="fadeTrigger">
             {{ currentStep.caption }}
           </p>
           <div class="step-dots">
             @for (step of processData.steps; track $index) {
-              <button 
-                class="carousel-dot" 
+              <button
+                class="carousel-dot"
                 [class.active]="$index === currentStepIndex"
                 (click)="setStep($index)"
-                [attr.aria-label]="'Go to step ' + ($index + 1)">
-              </button>
+                [attr.aria-label]="'Go to step ' + ($index + 1)"
+              ></button>
             }
           </div>
         </div>

@@ -135,7 +135,7 @@ export class ThreeService implements OnDestroy {
       65,
       window.innerWidth / window.innerHeight,
       0.1,
-      1000
+      1000,
     );
     this.camera.position.z = 5;
 
@@ -199,7 +199,7 @@ export class ThreeService implements OnDestroy {
       new THREE.Vector2(window.innerWidth, window.innerHeight),
       this.bloomParams.strength,
       this.bloomParams.radius,
-      this.bloomParams.threshold
+      this.bloomParams.threshold,
     );
     this.composer.addPass(this.bloomPass);
 
@@ -347,7 +347,7 @@ export class ThreeService implements OnDestroy {
           metalness: 0.1,
           envMapIntensity: 0.4,
           transparent: true,
-          opacity: 0,       // Start transparent — fade in below
+          opacity: 0, // Start transparent — fade in below
           alphaTest: 0.01,
         });
         mat.normalScale.set(1.2, 1.2);
@@ -364,7 +364,9 @@ export class ThreeService implements OnDestroy {
           opacity: 1,
           duration: 0.6,
           ease: 'power2.out',
-          onUpdate: () => { mat.needsUpdate = true; },
+          onUpdate: () => {
+            mat.needsUpdate = true;
+          },
           onComplete: () => {
             mat.transparent = false;
             mat.opacity = 1;
@@ -530,7 +532,8 @@ export class ThreeService implements OnDestroy {
   // =========================================================================
 
   private animateAccentLights(): void {
-    const r1 = 4, r2 = 6;
+    const r1 = 4,
+      r2 = 6;
     const t = this.animationTime;
 
     this.accentLight1.position.x = Math.cos(t * 0.5) * r1;
@@ -597,7 +600,7 @@ export class ThreeService implements OnDestroy {
       // PHASE 3: Allow native scrolling if the page is scrolled down (in Process section)
       // We use a small threshold (> 5) to account for sub-pixel scrolling or rubber-banding.
       if (window.scrollY > 5) {
-        return; 
+        return;
       }
 
       event.preventDefault();
@@ -609,7 +612,9 @@ export class ThreeService implements OnDestroy {
         this.updateFocus(dir);
         this.accumulatedScroll = 0;
         this.isScrolling = true;
-        setTimeout(() => { this.isScrolling = false; }, this.scrollCooldown);
+        setTimeout(() => {
+          this.isScrolling = false;
+        }, this.scrollCooldown);
       }
     };
     window.addEventListener('wheel', this.wheelEventHandler, { passive: false });
@@ -676,7 +681,6 @@ export class ThreeService implements OnDestroy {
       });
 
       this.onFocusChange.next(this.paperData[this.currentFocusIndex]);
-
     } else if (newIndex < 0) {
       // Scrolled up past the first item
       this.returnToGeneralView();
@@ -710,13 +714,17 @@ export class ThreeService implements OnDestroy {
 
     gsap.to(this.camera.position, {
       duration: 1.8,
-      x: 0, y: 0, z: 5,
+      x: 0,
+      y: 0,
+      z: 5,
       ease: 'power3.inOut',
     });
 
     gsap.to(this.spotLight.target.position, {
       duration: 1.5,
-      x: 0, y: 0, z: 0,
+      x: 0,
+      y: 0,
+      z: 0,
       ease: 'power2.inOut',
     });
 
@@ -755,14 +763,20 @@ export class ThreeService implements OnDestroy {
 
     if (this.deviceTier === 'high') {
       gsap.to(this.dofParams, {
-        duration: 1.8, focus: 4, aperture: 0.01, maxblur: 0.02, ease: 'power2.inOut',
+        duration: 1.8,
+        focus: 4,
+        aperture: 0.01,
+        maxblur: 0.02,
+        ease: 'power2.inOut',
       });
     }
 
     gsap.to(newPaper.scale, { duration: 1.2, x: 1.05, y: 1.05, z: 1.05, ease: 'power2.out' });
     gsap.to(this.spotLight.target.position, {
       duration: 1.5,
-      x: newPaper.position.x, y: newPaper.position.y, z: newPaper.position.z,
+      x: newPaper.position.x,
+      y: newPaper.position.y,
+      z: newPaper.position.z,
       ease: 'power2.inOut',
     });
     gsap.to(this.bloomParams, { duration: 1.5, strength: 1, ease: 'power2.inOut', delay: 0.3 });
@@ -816,7 +830,7 @@ export class ThreeService implements OnDestroy {
       `.replace(
         '#include <begin_vertex>',
         `#include <begin_vertex>
-        vAnimationData = aAnimationData;`
+        vAnimationData = aAnimationData;`,
       );
 
       shader.fragmentShader = `
@@ -827,7 +841,7 @@ export class ThreeService implements OnDestroy {
         'vec4 diffuseColor = vec4( diffuse, opacity );',
         `float blink = (sin(time * vAnimationData.y + vAnimationData.x) + 1.0) / 2.0;
         blink = pow(blink, 2.0);
-        vec4 diffuseColor = vec4( diffuse, opacity * blink );`
+        vec4 diffuseColor = vec4( diffuse, opacity * blink );`,
       );
     };
 
@@ -839,8 +853,12 @@ export class ThreeService implements OnDestroy {
   // Utility setters (unchanged API so Scene component keeps working)
   // =========================================================================
 
-  public setScrollCooldown(ms: number): void { this.scrollCooldown = ms; }
-  public setScrollThreshold(t: number): void { this.scrollThreshold = t; }
+  public setScrollCooldown(ms: number): void {
+    this.scrollCooldown = ms;
+  }
+  public setScrollThreshold(t: number): void {
+    this.scrollThreshold = t;
+  }
 
   public adjustLightingIntensity(multiplier: number): void {
     this.accentLight1.intensity = 2.0 * multiplier;
@@ -852,20 +870,26 @@ export class ThreeService implements OnDestroy {
   public setBloomParams(strength: number, radius: number, threshold: number): void {
     this.bloomParams = { strength, radius, threshold };
   }
-  public getBloomStrength(): number { return this.bloomParams.strength; }
+  public getBloomStrength(): number {
+    return this.bloomParams.strength;
+  }
 
   public setDOFParams(focus: number, aperture: number, maxblur: number): void {
     this.dofParams.focus = focus;
     this.dofParams.aperture = aperture;
     this.dofParams.maxblur = maxblur;
   }
-  public getDOFParams() { return { ...this.dofParams }; }
+  public getDOFParams() {
+    return { ...this.dofParams };
+  }
 
   public enableDOF(enabled: boolean): void {
     this.dofParams.enabled = enabled;
     if (this.bokehPass) this.bokehPass.enabled = enabled;
   }
-  public isDOFEnabled(): boolean { return this.dofParams.enabled; }
+  public isDOFEnabled(): boolean {
+    return this.dofParams.enabled;
+  }
 
   public setFocusDistance(distance: number): void {
     gsap.to(this.dofParams, { duration: 1.0, focus: distance, ease: 'power2.out' });

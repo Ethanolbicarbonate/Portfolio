@@ -1,4 +1,13 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, NgZone, ChangeDetectorRef, Input } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  ViewChild,
+  AfterViewInit,
+  OnDestroy,
+  NgZone,
+  ChangeDetectorRef,
+  Input,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import * as THREE from 'three';
 
@@ -22,7 +31,7 @@ export interface ProcessProject {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './process-section.component.html',
-  styleUrls: ['./process-section.component.scss']
+  styleUrls: ['./process-section.component.scss'],
 })
 export class ProcessSectionComponent implements AfterViewInit, OnDestroy {
   @ViewChild('processBgCanvas') processBgCanvas!: ElementRef<HTMLCanvasElement>;
@@ -47,7 +56,10 @@ export class ProcessSectionComponent implements AfterViewInit, OnDestroy {
     return this.processData?.steps[this.currentStepIndex];
   }
 
-  constructor(private ngZone: NgZone, private cdr: ChangeDetectorRef) {}
+  constructor(
+    private ngZone: NgZone,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   ngAfterViewInit(): void {
     this.initProcessBackground();
@@ -64,19 +76,20 @@ export class ProcessSectionComponent implements AfterViewInit, OnDestroy {
   }
 
   public nextStep(): void {
-    if (this.currentStepIndex < this.processData.steps.length - 1) this.setStep(this.currentStepIndex + 1);
+    if (this.currentStepIndex < this.processData.steps.length - 1)
+      this.setStep(this.currentStepIndex + 1);
   }
 
   public setStep(index: number): void {
     if (index === this.currentStepIndex) return;
     this.fadeTrigger = false;
-    this.cdr.detectChanges(); 
-    
+    this.cdr.detectChanges();
+
     setTimeout(() => {
       this.currentStepIndex = index;
       this.fadeTrigger = true;
       this.cdr.detectChanges();
-    }, 50); 
+    }, 50);
   }
 
   // --- Three.js Logic ---
@@ -85,18 +98,23 @@ export class ProcessSectionComponent implements AfterViewInit, OnDestroy {
     const canvas = this.processBgCanvas.nativeElement;
     this.processRenderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
     this.processRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-    
+
     this.processScene = new THREE.Scene();
-    this.processCamera = new THREE.PerspectiveCamera(60, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+    this.processCamera = new THREE.PerspectiveCamera(
+      60,
+      canvas.clientWidth / canvas.clientHeight,
+      0.1,
+      1000,
+    );
     this.processCamera.position.z = 30;
 
     const particleCount = 1000;
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
-    for(let i = 0; i < particleCount * 3; i++) {
+    for (let i = 0; i < particleCount * 3; i++) {
       positions[i] = (Math.random() - 0.5) * 100;
     }
-    
+
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     const material = new THREE.PointsMaterial({
       color: 0x8ab4f8,
@@ -104,12 +122,12 @@ export class ProcessSectionComponent implements AfterViewInit, OnDestroy {
       transparent: true,
       opacity: 0.25,
       blending: THREE.AdditiveBlending,
-      depthWrite: false
+      depthWrite: false,
     });
-    
+
     this.processParticles = new THREE.Points(geometry, material);
     this.processScene.add(this.processParticles);
-    
+
     this.processResizeObserver = new ResizeObserver(() => this.resizeProcessBackground());
     if (canvas.parentElement) this.processResizeObserver.observe(canvas.parentElement);
   }
@@ -119,7 +137,7 @@ export class ProcessSectionComponent implements AfterViewInit, OnDestroy {
     const canvas = this.processBgCanvas.nativeElement;
     const parent = canvas.parentElement;
     if (!parent) return;
-    
+
     this.processCamera.aspect = parent.clientWidth / parent.clientHeight;
     this.processCamera.updateProjectionMatrix();
     this.processRenderer.setSize(parent.clientWidth, parent.clientHeight, false);
@@ -127,15 +145,18 @@ export class ProcessSectionComponent implements AfterViewInit, OnDestroy {
 
   private setupProcessObserver(): void {
     if (!this.processSectionRef) return;
-    this.processObserver = new IntersectionObserver((entries) => {
-      this.isProcessVisible = entries[0].isIntersecting;
-      if (this.isProcessVisible) {
-        this.resizeProcessBackground();
-        this.startProcessAnimation();
-      } else {
-        this.stopProcessAnimation();
-      }
-    }, { threshold: 0.0 });
+    this.processObserver = new IntersectionObserver(
+      (entries) => {
+        this.isProcessVisible = entries[0].isIntersecting;
+        if (this.isProcessVisible) {
+          this.resizeProcessBackground();
+          this.startProcessAnimation();
+        } else {
+          this.stopProcessAnimation();
+        }
+      },
+      { threshold: 0.0 },
+    );
     this.processObserver.observe(this.processSectionRef.nativeElement);
   }
 
