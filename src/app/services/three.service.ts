@@ -593,6 +593,12 @@ export class ThreeService implements OnDestroy {
     if (this.wheelEventHandler) return;
 
     this.wheelEventHandler = (event: WheelEvent) => {
+      // PHASE 3: Allow native scrolling if the page is scrolled down (in Process section)
+      // We use a small threshold (> 5) to account for sub-pixel scrolling or rubber-banding.
+      if (window.scrollY > 5) {
+        return; 
+      }
+
       event.preventDefault();
       if (this.isScrolling) return;
 
@@ -671,12 +677,16 @@ export class ThreeService implements OnDestroy {
       this.onFocusChange.next(this.paperData[this.currentFocusIndex]);
 
     } else if (newIndex < 0) {
+      // Scrolled up past the first item
       this.returnToGeneralView();
+    } else if (newIndex >= this.papers.length) {
+      // PHASE 3: Scrolled down past the last item -> glide down to Process Section!
+      const processSection = document.getElementById('process-section');
+      if (processSection) {
+        processSection.scrollIntoView({ behavior: 'smooth' });
+      }
     }
-    // If newIndex >= papers.length — already at the last paper, do nothing
-    // (the skip button in the UI will handle navigating to the process section).
   }
-
   public returnToGeneralView(): void {
     if (this.currentFocusIndex === -1) return;
 

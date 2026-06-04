@@ -28,24 +28,15 @@ export class IllustrationsComponent implements OnInit, OnDestroy {
   isPreviewVisible: boolean = false;
 
   // -------------------------------------------------------------------------
-  // Pagination state
+  // Pagination & Scroll state
   // -------------------------------------------------------------------------
-  // Total number of illustrations — kept in sync with scene.ts papers array.
   readonly totalIllustrations = 11;
-
-  // Which dot is active (-1 = general view / none active).
   activeDotIndex: number = -1;
-
-  // Controls whether the dot rail is visible at all.
-  // It appears when the user first focuses an illustration and hides when
-  // they return to the general view.
   dotsVisible: boolean = false;
-
-  // Build an array of indices so *ngFor can iterate over them.
-  readonly dotIndices: number[] = Array.from(
-    { length: this.totalIllustrations },
-    (_, i) => i
-  );
+  readonly dotIndices: number[] = Array.from({ length: this.totalIllustrations }, (_, i) => i);
+  
+  // Phase 3: Tracks if we are at the top of the page
+  isAtTop: boolean = true;
 
   private focusSub!: Subscription;
 
@@ -56,22 +47,17 @@ export class IllustrationsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Subscribe to focus changes emitted by ThreeService so the dots stay in
-    // sync whether navigation happened via scroll or via dot click.
+    // Check initial scroll position
+    this.checkScrollPosition();
+
     this.focusSub = this.threeService.onFocusChange.subscribe((data) => {
-      // Run inside NgZone so Angular's change detection picks up the update,
-      // because ThreeService runs outside Angular (runOutsideAngular in animate()).
       this.ngZone.run(() => {
         this.focusedPaper = data;
         this.activeDotIndex = this.threeService.getCurrentFocusIndex();
 
         if (data !== null) {
-          // Show the rail as soon as any illustration is focused.
           this.dotsVisible = true;
         } else {
-          // Hide the rail when returning to general view.
-          // Small delay so it fades out rather than snapping away while the
-          // camera is still mid-animation.
           setTimeout(() => {
             this.dotsVisible = false;
             this.cdr.markForCheck();
@@ -89,7 +75,6 @@ export class IllustrationsComponent implements OnInit, OnDestroy {
     if (this.focusSub) {
       this.focusSub.unsubscribe();
     }
-
     setTimeout(() => {
       this.threeService.stopAnimation();
       this.threeService.disableScrollAnimation();
@@ -98,8 +83,22 @@ export class IllustrationsComponent implements OnInit, OnDestroy {
   }
 
   // -------------------------------------------------------------------------
-  // Keyboard
+  // Scroll & Keyboard Listeners
   // -------------------------------------------------------------------------
+  @HostListener('window:scroll', [])
+  onWindowScroll(): void {
+    this.checkScrollPosition();
+  }
+
+  private checkScrollPosition(): void {
+    // Hide the skip button if we've scrolled down more than 50px
+    const currentlyAtTop = window.scrollY < 50;
+    if (this.isAtTop !== currentlyAtTop) {
+      this.isAtTop = currentlyAtTop;
+      this.cdr.markForCheck(); // Ensure the UI updates
+    }
+  }
+
   @HostListener('window:keydown.escape')
   onEscapeKey(): void {
     this.returnToGeneralView();
@@ -109,11 +108,18 @@ export class IllustrationsComponent implements OnInit, OnDestroy {
   // Public actions
   // -------------------------------------------------------------------------
   public returnToGeneralView(): void {
+    // Phase 3: If we are scrolled down into the process section, smoothly scroll back up
+    if (!this.isAtTop) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
     this.threeService.returnToGeneralView();
   }
 
-  /** Called when the user clicks a pagination dot. */
   public onDotClick(index: number): void {
+    // If user clicks a pagination dot while scrolled down, smoothly scroll back to the 3D view
+    if (!this.isAtTop) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
     this.threeService.navigateToPaper(index);
   }
 
@@ -129,5 +135,15 @@ export class IllustrationsComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.previewImageUrl = null;
     }, 500);
+  }
+
+  // -------------------------------------------------------------------------
+  // Phase 3: Scroll to Process Section
+  // -------------------------------------------------------------------------
+  public scrollToProcess(): void {
+    const processSection = document.getElementById('process-section');
+    if (processSection) {
+      processSection.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 }

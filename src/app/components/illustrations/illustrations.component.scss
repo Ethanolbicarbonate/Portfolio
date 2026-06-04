@@ -219,3 +219,94 @@
     }
   }
 }
+
+// File: src/app/components/illustrations/illustrations.component.scss
+// Add this to the very bottom of the file!
+
+// ============================================================================
+// Phase 3: Bottom Actions (Skip Button + Back Button)
+// ============================================================================
+
+.bottom-actions {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  // Override global back-button position since it's now wrapped in a flex container
+  .back-button {
+    position: relative;
+    bottom: auto;
+    right: auto;
+    z-index: auto;
+  }
+}
+
+.skip-button {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+}
+
+// ============================================================================
+// Phase 3: Process Section Layout & Spacer
+// ============================================================================
+
+.hero-spacer {
+  // Pushes the process section below the fold, acting as an invisible
+  // window to the fixed 3D canvas underneath
+  height: 100vh;
+  width: 100%;
+  pointer-events: none;
+}
+
+.process-section {
+  position: relative;
+  z-index: 50; // Sits above the 3D canvas but below fixed UI navigation
+  min-height: 100vh;
+  
+  // Phase 3 aesthetic baseline (will be polished in Phase 4)
+  background: rgba(6, 17, 26, 0.98); // Almost solid dark match
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+  
+  padding: 100px 40px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .process-scaffold {
+    text-align: center;
+    opacity: 0.5;
+
+    h2 {
+      font-size: 2.5rem;
+      margin: 0 0 10px 0;
+      letter-spacing: -0.5px;
+    }
+
+    p {
+      font-size: 1.2rem;
+      font-weight: 300;
+    }
+  }
+}

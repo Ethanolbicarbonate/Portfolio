@@ -10,11 +10,7 @@
   </h1>
 </div>
 
-<!-- -----------------------------------------------------------------------
-     Vertical pagination dot rail
-     Appears on the right side of the screen when an illustration is focused.
-     Each dot corresponds to one illustration; the active dot is filled.
-     -------------------------------------------------------------------- -->
+<!-- Vertical pagination dot rail -->
 <nav
   class="pagination-rail"
   [class.visible]="dotsVisible"
@@ -32,11 +28,17 @@
 
 </nav>
 
-<!-- Back button (shown when an illustration is focused) -->
+<!-- Phase 3: Bottom Actions (Skip & Back) -->
 @if (focusedPaper) {
-  <button class="back-button" (click)="returnToGeneralView()" aria-label="Return to overview">
-    &#x21A9;
-  </button>
+  <div class="bottom-actions">
+    <!-- Only show the skip button if we are at the top (canvas view) -->
+    @if (isAtTop) {
+      <button class="skip-button" (click)="scrollToProcess()">Skip to Process</button>
+    }
+    <button class="back-button" (click)="returnToGeneralView()" aria-label="Return to overview">
+      &#x21A9;
+    </button>
+  </div>
 }
 
 <!-- Full-screen image preview overlay -->
@@ -51,3 +53,14 @@
     <img [src]="previewImageUrl" alt="Full-screen preview of the selected illustration" />
   </div>
 }
+
+<!-- Phase 3: Spacer and Process Section Scaffold -->
+<!-- This keeps the 3D canvas at the top while letting the section below slide over it -->
+<div class="hero-spacer"></div>
+
+<section id="process-section" class="process-section">
+  <div class="process-scaffold">
+    <h2>Process Overview</h2>
+    <p>Modular process breakdown coming in Phase 4.</p>
+  </div>
+</section>
