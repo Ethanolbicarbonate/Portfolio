@@ -91,18 +91,14 @@ export class IllustrationsComponent implements OnInit, OnDestroy {
     // IMPORTANT: Restore scroll capability so the About page doesn't break
     document.body.style.overflow = 'auto';
 
-    if (this.focusSub) {
-      this.focusSub.unsubscribe();
-    }
-    if (this.processScrollSub) {
-      this.processScrollSub.unsubscribe();
-    }
+    this.focusSub?.unsubscribe();
+    this.processScrollSub?.unsubscribe();
 
-    setTimeout(() => {
+    window.requestAnimationFrame(() => {
       this.threeService.stopAnimation();
       this.threeService.disableScrollAnimation();
       this.threeService.disposeScene();
-    }, 0);
+    });
   }
 
   // -------------------------------------------------------------------------
@@ -136,23 +132,23 @@ export class IllustrationsComponent implements OnInit, OnDestroy {
 
   public returnToGeneralView(): void {
     if (!this.isAtTop) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      this.ensureTop();
     }
     this.threeService.returnToGeneralView();
   }
 
   public onDotClick(index: number): void {
     if (!this.isAtTop) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      this.ensureTop();
     }
     this.threeService.navigateToPaper(index);
   }
 
   public onPreviewImage(imageUrl: string): void {
     this.previewImageUrl = imageUrl;
-    setTimeout(() => {
+    window.requestAnimationFrame(() => {
       this.isPreviewVisible = true;
-    }, 10);
+    });
   }
 
   public closePreview(): void {
@@ -170,13 +166,17 @@ export class IllustrationsComponent implements OnInit, OnDestroy {
     this.isAtTop = false;
     this.cdr.markForCheck();
 
-    // A tiny timeout (10ms) ensures the browser has registered
+    // Use requestAnimationFrame to ensure the browser has registered
     // the overflow change before we ask it to scroll
-    setTimeout(() => {
+    window.requestAnimationFrame(() => {
       const processSection = document.getElementById('process-section');
       if (processSection) {
         processSection.scrollIntoView({ behavior: 'smooth' });
       }
-    }, 10);
+    });
+  }
+
+  private ensureTop(): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
