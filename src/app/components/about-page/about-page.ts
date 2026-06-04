@@ -110,7 +110,7 @@ export class AboutPage implements OnInit, OnDestroy {
           setTimeout(() => {
             dot.style.boxShadow = '';
           }, TIMEOUTS.GLOW_DURATION);
-        }, Math.random() * 5000 + 2000);
+        }, Math.random() * TIMEOUTS.GLOW_RANDOM_VARIANCE + TIMEOUTS.GLOW_RANDOM_BASE);
         
         this.skillAnimationTimeouts.push(glowTimeout);
       });
