@@ -32,6 +32,8 @@ export class ProcessSectionComponent implements AfterViewInit, OnDestroy {
   private processObserver!: IntersectionObserver;
   private processResizeObserver!: ResizeObserver;
   private isProcessVisible = false;
+  private processTime = 0;
+  private processMaterial!: THREE.ShaderMaterial;
 
   get currentStep(): ProcessStep {
     return this.processData?.steps[this.currentStepIndex];
@@ -92,24 +94,89 @@ export class ProcessSectionComponent implements AfterViewInit, OnDestroy {
     );
     this.processCamera.position.z = 30;
 
-    const particleCount = 1000;
+    const particleCount = 1500;
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
-    for (let i = 0; i < particleCount * 3; i++) {
-      positions[i] = (Math.random() - 0.5) * 100;
+    const randoms = new Float32Array(particleCount * 3); // For individual behavior
+
+    for (let i = 0; i < particleCount; i++) {
+      // Spread them wide and tall
+      positions[i * 3 + 0] = (Math.random() - 0.5) * 100;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 100;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 50;
+      
+      randoms[i * 3 + 0] = Math.random(); // Sway speed
+      randoms[i * 3 + 1] = Math.random(); // Rise speed
+      randoms[i * 3 + 2] = Math.random(); // Size multiplier
     }
 
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    const material = new THREE.PointsMaterial({
-      color: 0x8ab4f8,
-      size: 0.15,
+    geometry.setAttribute('aRandom', new THREE.BufferAttribute(randoms, 3));
+
+    // Create the soft glowing texture
+    const texCanvas = document.createElement('canvas');
+    texCanvas.width = 32;
+    texCanvas.height = 32;
+    const ctx = texCanvas.getContext('2d')!;
+    const gradient = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+    gradient.addColorStop(0.3, 'rgba(255, 255, 255, 0.6)');
+    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 32, 32);
+    const texture = new THREE.CanvasTexture(texCanvas);
+
+    // Custom Shader for cinematic rising dust
+    this.processMaterial = new THREE.ShaderMaterial({
+      uniforms: {
+        uTime: { value: 0 },
+        uTexture: { value: texture },
+        uColor: { value: new THREE.Color(0x8ab4f8) } // Matches UI accent color
+      },
+      vertexShader: `
+        uniform float uTime;
+        attribute vec3 aRandom;
+        varying float vAlpha;
+
+        void main() {
+          vec3 pos = position;
+          
+          // Organic upward movement that loops seamlessly using modulo
+          float riseSpeed = (aRandom.y * 2.0 + 1.0);
+          pos.y = mod(position.y + uTime * riseSpeed + 50.0, 100.0) - 50.0;
+          
+          // Gentle side-to-side sway
+          pos.x += sin(uTime * aRandom.x * 2.0 + position.y) * 2.0;
+          pos.z += cos(uTime * aRandom.x * 1.5 + position.x) * 1.5;
+
+          // Fade out near the top and bottom for smooth looping
+          vAlpha = smoothstep(-50.0, -30.0, pos.y) * smoothstep(50.0, 30.0, pos.y);
+          // Add organic blinking
+          vAlpha *= (sin(uTime * 3.0 * aRandom.x + aRandom.y * 10.0) * 0.5 + 0.5) * 0.8 + 0.2;
+
+          vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+          
+          // Size attenuation based on depth and random scale
+          gl_PointSize = (12.0 * aRandom.z + 4.0) * (30.0 / -mvPosition.z);
+          gl_Position = projectionMatrix * mvPosition;
+        }
+      `,
+      fragmentShader: `
+        uniform sampler2D uTexture;
+        uniform vec3 uColor;
+        varying float vAlpha;
+
+        void main() {
+          vec4 texColor = texture2D(uTexture, gl_PointCoord);
+          gl_FragColor = vec4(uColor, texColor.a * vAlpha * 0.6); // 0.6 max opacity
+        }
+      `,
       transparent: true,
-      opacity: 0.25,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
     });
 
-    this.processParticles = new THREE.Points(geometry, material);
+    this.processParticles = new THREE.Points(geometry, this.processMaterial);
     this.processScene.add(this.processParticles);
 
     this.processResizeObserver = new ResizeObserver(() => this.resizeProcessBackground());
@@ -152,8 +219,18 @@ export class ProcessSectionComponent implements AfterViewInit, OnDestroy {
           this.processAnimFrame = null;
           return;
         }
-        this.processParticles.rotation.y += 0.0005;
-        this.processParticles.rotation.x += 0.0002;
+        
+        // Feed time into the shader instead of rotating the mesh
+        this.processTime += 0.01;
+        if (this.processMaterial) {
+          this.processMaterial.uniforms['uTime'].value = this.processTime;
+        }
+        
+        // Very slow camera pan for added cinematic effect
+        this.processCamera.position.x = Math.sin(this.processTime * 0.2) * 5;
+        this.processCamera.position.y = Math.cos(this.processTime * 0.1) * 2;
+        this.processCamera.lookAt(0, 0, 0);
+
         this.processRenderer.render(this.processScene, this.processCamera);
         this.processAnimFrame = requestAnimationFrame(loop);
       };

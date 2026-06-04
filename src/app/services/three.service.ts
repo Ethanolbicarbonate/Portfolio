@@ -785,53 +785,99 @@ export class ThreeService implements OnDestroy {
     this.onFocusChange.next(this.paperData[this.currentFocusIndex]);
   }
 
-  // =========================================================================
-  // Particles — Phase 0: fix shader uniform reference, use PointsMaterial
+// =========================================================================
+  // Particles — Upgraded Organic & Glowing
   // =========================================================================
 
   private createAtmosphericParticles(): void {
-    const particleCount = 7000;
+    const particleCount = 4000; // Reduced count for better performance since they are larger and glow now
     const boxSize = 60;
 
     const positions = new Float32Array(particleCount * 3);
     const animData = new Float32Array(particleCount * 2);
+    const sizes = new Float32Array(particleCount);
 
     for (let i = 0; i < particleCount; i++) {
       positions[i * 3 + 0] = (Math.random() - 0.5) * boxSize;
       positions[i * 3 + 1] = (Math.random() - 0.5) * boxSize;
       positions[i * 3 + 2] = (Math.random() - 0.5) * boxSize;
+      
+      // x = sway speed, y = blink speed
       animData[i * 2 + 0] = Math.random() * Math.PI * 2;
-      animData[i * 2 + 1] = 0.5 + Math.random() * 0.5;
+      animData[i * 2 + 1] = 0.2 + Math.random() * 0.8; 
+      
+      // Varying sizes for depth perception
+      sizes[i] = Math.random() * 0.5 + 0.1;
     }
 
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     geometry.setAttribute('aAnimationData', new THREE.BufferAttribute(animData, 2));
+    geometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
+
+    // Programmatic soft glowing circle texture
+    const canvas = document.createElement('canvas');
+    canvas.width = 32;
+    canvas.height = 32;
+    const ctx = canvas.getContext('2d')!;
+    const gradient = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+    gradient.addColorStop(0.2, 'rgba(255, 255, 255, 0.8)');
+    gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.2)');
+    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 32, 32);
+    const particleTexture = new THREE.CanvasTexture(canvas);
 
     const material = new THREE.PointsMaterial({
       color: 0xffffff,
-      size: 0.05,
+      size: 0.8, // Base size
+      map: particleTexture,
       transparent: true,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
+      opacity: 0.6,
     });
 
-    // Phase 0: capture the uniform reference directly inside onBeforeCompile
-    // instead of casting the whole shader object as particleMaterial.
-    material.onBeforeCompile = (shader) => {
-      // Store a direct reference to the time uniform.
+material.onBeforeCompile = (shader) => {
       const timeUniform = { value: 0.0 };
       shader.uniforms['time'] = timeUniform;
       this.particleTimeUniform = timeUniform;
 
       shader.vertexShader = `
         attribute vec2 aAnimationData;
+        attribute float aSize;
         varying vec2 vAnimationData;
+        uniform float time;
         ${shader.vertexShader}
       `.replace(
         '#include <begin_vertex>',
-        `#include <begin_vertex>
-        vAnimationData = aAnimationData;`,
+        `
+        vAnimationData = aAnimationData;
+        
+        // 1. Slow down time heavily for a gentle float
+        float t = time * 0.05; 
+        
+        vec3 transformed = vec3(position);
+        
+        // 2. Overlap multiple waves to create unpredictable, organic wandering
+        // We use the particle's unique position and random data to offset the waves
+        float wanderX = sin(t * vAnimationData.y + position.y) + cos(t * 0.7 + vAnimationData.x);
+        float wanderY = cos(t * (vAnimationData.y * 0.8) + position.z) + sin(t * 0.5 - vAnimationData.x);
+        float wanderZ = sin(t * (vAnimationData.y * 1.2) - position.x) + cos(t * 0.6 + vAnimationData.x * 2.0);
+        
+        // 3. Apply the constraint (Radius)
+        // Two waves added together max out at exactly 2.0 or -2.0.
+        // Multiplying by 1.5 means a particle can NEVER wander further than 3.0 units 
+        // away from its original spawn point in any direction.
+        float constraintRadius = 1.5;
+        transformed.x += wanderX * constraintRadius;
+        transformed.y += wanderY * constraintRadius;
+        transformed.z += wanderZ * constraintRadius;
+        `
+      ).replace(
+        'gl_PointSize = size;',
+        `gl_PointSize = size * aSize * (10.0 / -mvPosition.z);`
       );
 
       shader.fragmentShader = `
@@ -840,62 +886,16 @@ export class ThreeService implements OnDestroy {
         ${shader.fragmentShader}
       `.replace(
         'vec4 diffuseColor = vec4( diffuse, opacity );',
-        `float blink = (sin(time * vAnimationData.y + vAnimationData.x) + 1.0) / 2.0;
-        blink = pow(blink, 2.0);
-        vec4 diffuseColor = vec4( diffuse, opacity * blink );`,
+        `
+        // Slow down the blinking so it matches the gentle floating
+        float blink = (sin(time * 0.5 * vAnimationData.y + vAnimationData.x) + 1.0) * 0.5;
+        blink = smoothstep(0.0, 1.0, blink) * 0.8 + 0.2; 
+        vec4 diffuseColor = vec4(diffuse, opacity * blink);
+        `
       );
     };
-
+    
     this.particles = new THREE.Points(geometry, material);
     this.scene.add(this.particles);
-  }
-
-  // =========================================================================
-  // Utility setters (unchanged API so Scene component keeps working)
-  // =========================================================================
-
-  public setScrollCooldown(ms: number): void {
-    this.scrollCooldown = ms;
-  }
-  public setScrollThreshold(t: number): void {
-    this.scrollThreshold = t;
-  }
-
-  public adjustLightingIntensity(multiplier: number): void {
-    this.accentLight1.intensity = 2.0 * multiplier;
-    this.accentLight2.intensity = 1.8 * multiplier;
-    this.spotLight.intensity = 3.0 * multiplier;
-    this.rimLight.intensity = 1.2 * multiplier;
-  }
-
-  public setBloomParams(strength: number, radius: number, threshold: number): void {
-    this.bloomParams = { strength, radius, threshold };
-  }
-  public getBloomStrength(): number {
-    return this.bloomParams.strength;
-  }
-
-  public setDOFParams(focus: number, aperture: number, maxblur: number): void {
-    this.dofParams.focus = focus;
-    this.dofParams.aperture = aperture;
-    this.dofParams.maxblur = maxblur;
-  }
-  public getDOFParams() {
-    return { ...this.dofParams };
-  }
-
-  public enableDOF(enabled: boolean): void {
-    this.dofParams.enabled = enabled;
-    if (this.bokehPass) this.bokehPass.enabled = enabled;
-  }
-  public isDOFEnabled(): boolean {
-    return this.dofParams.enabled;
-  }
-
-  public setFocusDistance(distance: number): void {
-    gsap.to(this.dofParams, { duration: 1.0, focus: distance, ease: 'power2.out' });
-  }
-  public animateAperture(targetAperture: number, duration = 1.5): void {
-    gsap.to(this.dofParams, { duration, aperture: targetAperture, ease: 'power2.inOut' });
   }
 }

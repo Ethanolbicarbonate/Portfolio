@@ -3,6 +3,7 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { ThreeService } from '../../services/three.service';
 import { PaperData } from '../../models/paper-data.model';
+import { PAPER_DATA } from '../../data/paper-data';
 
 @Component({
   selector: 'app-scene',
@@ -13,97 +14,7 @@ import { PaperData } from '../../models/paper-data.model';
 export class Scene implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('canvas') private canvasRef!: ElementRef;
 
-  private papers: PaperData[] = [
-    {
-      id: 1,
-      imageUrl: 'assets/images/image1.png',
-      title: 'When Pens Wander',
-      description:
-        'A luminous tale of creativity in motion, When Pens Wander depicts a writer-turned-nomad who carries her stories across the world on the weight of an enormous pen strapped to her back. \n\nShe is not alone—her loyal companion Caleb, a small but determined tiger, shoulders stacks of books and scattered pages, embodying the chaos and discipline of storytelling itself. Together, they journey through glowing cities and shifting landscapes, chasing words and weaving worlds. Every step forward is a new chapter waiting to be written.',
-      position: { x: -8, y: 5, z: -10 },
-      rotation: { x: -0.2, y: 0.8, z: 0.3 },
-    },
-    {
-      id: 2,
-      imageUrl: 'assets/images/image2.png',
-      title: 'Rakugaki',
-      description: 'Rakugaki captures an urban street corner bathed in warm, late-afternoon light.\n\nThe composition balances dynamic elements in the foreground with architectural geometry in the background.\n\nThe figure of the graffiti artist becomes the focal point, framed by the rolling shutter and surrounded by saturated colors. Diagonal shadows and tilted signage guide the eye toward the act of creation at the center.',
-      position: { x: 12, y: 2, z: -20 },
-      rotation: { x: -0.3, y: 1.2, z: -0.4 },
-    },
-    {
-      id: 3,
-      imageUrl: 'assets/images/image3.jpg',
-      title: 'Rest',
-      description: 'That moment when what ifs started flooding your thoughts then you began to question the choices youve made.\n\nWill I be alright? As I sit here, sipping my soda and watching the sun set on the horizon, feeling the warm yet calming breeze, solace finds me.\n\nI reassure myself, "I will manage, I will do just fine"',
-      position: { x: -8, y: -5, z: -5 },
-      rotation: { x: -0.2, y: 1, z: 0.6 },
-    },
-    {
-      id: 4,
-      imageUrl: 'assets/images/image4.png',
-      title: 'Psst',
-      description: 'Description for paper 4.',
-      position: { x: 18, y: -12, z: -25 },
-      rotation: { x: -0.3, y: 0.9, z: -0.2 },
-    },
-    {
-      id: 5,
-      imageUrl: 'assets/images/image5.png',
-      title: 'Lines',
-      description: 'Description for paper 5.',
-      position: { x: 1, y: -6, z: -8 },
-      rotation: { x: -0.2, y: 0.8, z: 0.8 },
-    },
-    {
-      id: 6,
-      imageUrl: 'assets/images/image6.png',
-      title: 'Statue',
-      description: 'Description for paper 6.',
-      position: { x: 6, y: 10, z: -15 },
-      rotation: { x: -0.3, y: 0.9, z: 0.7 },
-    },
-    {
-      id: 7,
-      imageUrl: 'assets/images/image7.png',
-      title: 'Shrine',
-      description: 'Description for paper 7.',
-      position: { x: -10, y: 12, z: -30 },
-      rotation: { x: -0.2, y: 1, z: -0.5 },
-    },
-    {
-      id: 8,
-      imageUrl: 'assets/images/image8.png',
-      title: 'Caleb Graduation',
-      description: 'Description for paper 8.',
-      position: { x: 25, y: 8, z: -18 },
-      rotation: { x: -0.3, y: 1.2, z: 0.4 },
-    },
-    {
-      id: 9,
-      imageUrl: 'assets/images/image9.png',
-      title: 'Halcyon Days',
-      description: 'Description for paper 9.',
-      position: { x: 0, y: 0, z: -22 },
-      rotation: { x: -0.2, y: 0.8, z: 0.9 },
-    },
-    {
-      id: 10,
-      imageUrl: 'assets/images/image10.png',
-      title: 'Tranquil',
-      description: 'Description for paper 10.',
-      position: { x: 14, y: -10, z: -10 },
-      rotation: { x: -0.3, y: 0.9, z: -0.8 },
-    },
-    {
-      id: 11,
-      imageUrl: 'assets/images/image11.png',
-      title: 'The Wild Robot',
-      description: 'Description for paper 11.',
-      position: { x: -6, y: 5, z: -2 },
-      rotation: { x: -0.2, y: 1.5, z: 0.3 },
-    },
-  ];
+  private papers: PaperData[] = PAPER_DATA;
 
   constructor(private threeService: ThreeService) {}
 
