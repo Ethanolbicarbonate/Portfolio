@@ -7,7 +7,6 @@ import {
   ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { Scene } from '../scene/scene';
@@ -20,11 +19,19 @@ import { ProcessSectionComponent } from '../process-section/process-section.comp
 import { ProcessProject } from '../../models/process-data.model';
 import { PROCESS_DATA } from '../../data/process-data';
 import { ImagePreviewComponent } from '../image-preview/image-preview.component';
+import { PaginationRailComponent } from '../pagination-rail/pagination-rail.component';
 
 @Component({
   selector: 'app-illustrations',
   standalone: true,
-  imports: [CommonModule, Scene, TextOverlayComponent, ProcessSectionComponent, ImagePreviewComponent],
+  imports: [
+    CommonModule,
+    Scene,
+    TextOverlayComponent,
+    ProcessSectionComponent,
+    ImagePreviewComponent,
+    PaginationRailComponent,
+  ],
   templateUrl: './illustrations.component.html',
   styleUrls: ['./illustrations.component.scss'],
 })
@@ -36,7 +43,6 @@ export class IllustrationsComponent implements OnInit, OnDestroy {
   readonly totalIllustrations = 11;
   activeDotIndex: number = -1;
   dotsVisible: boolean = false;
-  readonly dotIndices: number[] = Array.from({ length: this.totalIllustrations }, (_, i) => i);
   isAtTop: boolean = true;
 
   private focusSub!: Subscription;

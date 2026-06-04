@@ -11,21 +11,12 @@
 </div>
 
 <!-- Vertical pagination dot rail -->
-<nav
-  class="pagination-rail"
-  [class.visible]="dotsVisible && isAtTop"
-  aria-label="Illustration navigation"
->
-  @for (i of dotIndices; track i) {
-    <button
-      class="pagination-dot"
-      [class.active]="i === activeDotIndex"
-      (click)="onDotClick(i)"
-      [attr.aria-label]="'Go to illustration ' + (i + 1)"
-      [attr.aria-current]="i === activeDotIndex ? 'true' : null"
-    ></button>
-  }
-</nav>
+<app-pagination-rail 
+  [totalItems]="totalIllustrations" 
+  [activeIndex]="activeDotIndex" 
+  [isVisible]="dotsVisible && isAtTop" 
+  (dotClick)="onDotClick($event)">
+</app-pagination-rail>
 
 <!-- Phase 3: Bottom Actions (Skip & Back) -->
 @if (focusedPaper) {
