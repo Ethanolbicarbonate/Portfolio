@@ -1,6 +1,7 @@
 // File: .\app\components\about-page\about-page.ts
 import { Component, OnInit, OnDestroy, ElementRef, Renderer2 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import TIMEOUTS from '../../utils/timeouts';
 
 @Component({
   selector: 'app-about-page',
@@ -31,7 +32,7 @@ export class AboutPage implements OnInit, OnDestroy {
     // Restore scroll after initial animations
     setTimeout(() => {
       document.body.style.overflow = 'auto';
-    }, 1500);
+    }, TIMEOUTS.INITIAL_ANIMATION);
   }
 
   ngOnDestroy(): void {
@@ -89,12 +90,12 @@ export class AboutPage implements OnInit, OnDestroy {
           capsule.style.transform = 'scale(1.05)';
           setTimeout(() => {
             capsule.style.transform = 'scale(1)';
-          }, 200);
-        }, index * 100 + 2000); // Start after 2 seconds, stagger by 100ms
+          }, TIMEOUTS.SMALL_ANIM);
+        }, index * TIMEOUTS.SKILL_STAGGER + TIMEOUTS.SKILL_INIT_DELAY); // Start after SKILL_INIT_DELAY, stagger by SKILL_STAGGER
         
         this.skillAnimationTimeouts.push(timeout);
       });
-    }, 100);
+    }, TIMEOUTS.SMALL_DELAY);
   }
 
   // Setup floating dots animation
@@ -108,12 +109,12 @@ export class AboutPage implements OnInit, OnDestroy {
           dot.style.boxShadow = '0 0 10px rgba(255, 255, 255, 0.6)';
           setTimeout(() => {
             dot.style.boxShadow = '';
-          }, 1000);
+          }, TIMEOUTS.GLOW_DURATION);
         }, Math.random() * 5000 + 2000);
         
         this.skillAnimationTimeouts.push(glowTimeout);
       });
-    }, 3000);
+    }, TIMEOUTS.FLOATING_DOTS_INIT);
   }
 
   // Enhanced intersection observer for scroll-triggered animations
@@ -148,7 +149,7 @@ export class AboutPage implements OnInit, OnDestroy {
           '.content-card, .skill-category, .contact-card'
         );
         observeElements.forEach((el: HTMLElement) => this.animationObserver?.observe(el));
-      }, 200);
+      }, TIMEOUTS.SMALL_ANIM);
     }
   }
 
@@ -161,8 +162,8 @@ export class AboutPage implements OnInit, OnDestroy {
         icon.style.transform = 'scale(1.1) rotate(5deg)';
         setTimeout(() => {
           icon.style.transform = 'scale(1) rotate(0deg)';
-        }, 300);
-      }, 200);
+        }, TIMEOUTS.ICON_ANIM);
+      }, TIMEOUTS.SMALL_ANIM);
     }
   }
 
@@ -179,8 +180,8 @@ export class AboutPage implements OnInit, OnDestroy {
         setTimeout(() => {
           capsule.style.transform = 'translateY(0) scale(1)';
           capsule.style.boxShadow = '';
-        }, 400);
-      }, index * 80);
+        }, TIMEOUTS.CAPSULE_RESET);
+      }, index * TIMEOUTS.STAGGER_SMALL);
       
       this.skillAnimationTimeouts.push(timeout);
     });

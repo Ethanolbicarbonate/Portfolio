@@ -1,4 +1,5 @@
 import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, NgZone, ChangeDetectorRef, Input } from '@angular/core';
+import TIMEOUTS from '../../utils/timeouts';
 import { CommonModule } from '@angular/common';
 import * as THREE from 'three';
 
@@ -68,7 +69,7 @@ export class ProcessSectionComponent implements AfterViewInit, OnDestroy {
       this.currentStepIndex = index;
       this.fadeTrigger = true;
       this.cdr.detectChanges();
-    }, 50);
+    }, TIMEOUTS.TRANSITION_SHORT);
   }
 
   // --- Three.js Logic ---

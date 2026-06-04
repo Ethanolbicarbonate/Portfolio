@@ -20,6 +20,7 @@ import { ProcessProject } from '../../models/process-data.model';
 import { PROCESS_DATA } from '../../data/process-data';
 import { ImagePreviewComponent } from '../image-preview/image-preview.component';
 import { PaginationRailComponent } from '../pagination-rail/pagination-rail.component';
+import TIMEOUTS from '../../utils/timeouts';
 
 @Component({
   selector: 'app-illustrations',
@@ -78,7 +79,7 @@ export class IllustrationsComponent implements OnInit, OnDestroy {
           setTimeout(() => {
             this.dotsVisible = false;
             this.cdr.markForCheck();
-          }, 600);
+          }, TIMEOUTS.DOT_HIDE);
         }
         this.cdr.markForCheck();
       });
@@ -155,7 +156,7 @@ export class IllustrationsComponent implements OnInit, OnDestroy {
     this.isPreviewVisible = false;
     setTimeout(() => {
       this.previewImageUrl = null;
-    }, 500);
+    }, TIMEOUTS.PREVIEW_HIDE);
   }
 
   public scrollToProcess(): void {

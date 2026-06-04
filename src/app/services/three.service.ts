@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { PaperData } from '../models/paper-data.model';
 import { gsap } from 'gsap';
 import { Subject } from 'rxjs';
+import TIMEOUTS from '../utils/timeouts';
 
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
@@ -81,7 +82,7 @@ export class ThreeService implements OnDestroy {
   // Scroll state
   // -------------------------------------------------------------------------
   private isScrolling = false;
-  private scrollCooldown = 2000;
+  private scrollCooldown = TIMEOUTS.SCROLL_COOLDOWN;
   private scrollThreshold = 100;
   private accumulatedScroll = 0;
   private wheelEventHandler: ((event: WheelEvent) => void) | null = null;
