@@ -82,7 +82,7 @@ export class ThreeService implements OnDestroy {
   // Scroll state
   // -------------------------------------------------------------------------
   private isScrolling = false;
-  private scrollCooldown = TIMEOUTS.SCROLL_COOLDOWN;
+  private scrollCooldown = TIMEOUTS.threeService.scrollCooldown;
   private scrollThreshold = 100;
   private accumulatedScroll = 0;
   private wheelEventHandler: ((event: WheelEvent) => void) | null = null;
@@ -894,7 +894,7 @@ material.onBeforeCompile = (shader) => {
         `
       );
     };
-    
+
     this.particles = new THREE.Points(geometry, material);
     this.scene.add(this.particles);
   }

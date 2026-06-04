@@ -1,6 +1,7 @@
 // File: src/app/components/text-overlay/text-overlay.ts
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import TIMEOUTS from '../../utils/timeouts';
 import { PaperData } from '../../models/paper-data.model';
 
 @Component({
@@ -35,7 +36,7 @@ export class TextOverlayComponent implements OnChanges {
         this.isTransitioning = true; // Trigger whole card blur & fade out
         this.animateContent = false; // Reset text animation
 
-        // Wait 400ms (matches CSS transition) before swapping data
+        // Wait a short transition duration before swapping data
         this.transitionTimeout = setTimeout(() => {
           this.displayPaper = curr;
           this.isTransitioning = false; // Trigger card blur & fade in
@@ -43,8 +44,8 @@ export class TextOverlayComponent implements OnChanges {
           // Tiny delay to let DOM register the swap before staggering text
           this.animTimeout = setTimeout(() => {
             this.animateContent = true;
-          }, 20);
-        }, 400);
+          }, TIMEOUTS.textOverlay.contentDelay);
+        }, TIMEOUTS.textOverlay.transition);
       } 
       // If opening from the main overview or closing entirely
       else {
@@ -53,7 +54,7 @@ export class TextOverlayComponent implements OnChanges {
           this.isTransitioning = false;
           this.animTimeout = setTimeout(() => {
             this.animateContent = true;
-          }, 50);
+          }, TIMEOUTS.textOverlay.openDelay);
         } else {
           this.animateContent = false;
         }

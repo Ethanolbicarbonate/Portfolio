@@ -1,22 +1,37 @@
-// Centralized timeout values for UI timing consistency
+// Centralized timeout values grouped by component for consistent naming.
 export const TIMEOUTS = {
-  INITIAL_ANIMATION: 1500,
-  SMALL_DELAY: 100,
-  SKILL_INIT_DELAY: 2000,
-  SKILL_STAGGER: 100,
-  TRANSITION_SHORT: 50,
-  GLOW_DURATION: 1000,
-  GLOW_RANDOM_BASE: 2000,
-  GLOW_RANDOM_VARIANCE: 5000,
-  SMALL_ANIM: 200,
-  ICON_ANIM: 300,
-  CAPSULE_RESET: 400,
-  STAGGER_SMALL: 80,
-  FLOATING_DOTS_INIT: 3000,
-  SCROLL_COOLDOWN: 2000,
-  DOT_HIDE: 600,
-  PREVIEW_HIDE: 500,
-  RAF_DELAY: 10,
+  illustrations: {
+    dotHide: 600,
+    previewHide: 500,
+  },
+  aboutPage: {
+    initialAnimation: 1500,
+    initialDelay: 100,
+    skillInitDelay: 2000,
+    skillStagger: 100,
+    glowDuration: 1000,
+    glowRandomBase: 2000,
+    glowRandomVariance: 5000,
+    floatingDotsInit: 3000,
+    smallAnimation: 200,
+    iconAnimation: 300,
+    capsuleReset: 400,
+    staggerSmall: 80,
+  },
+  processSection: {
+    fadeDelay: 50,
+  },
+  textOverlay: {
+    transition: 400,
+    contentDelay: 20,
+    openDelay: 50,
+  },
+  threeService: {
+    scrollCooldown: 2000,
+  },
+  shared: {
+    rafDelay: 10,
+  },
 };
 
 export default TIMEOUTS;

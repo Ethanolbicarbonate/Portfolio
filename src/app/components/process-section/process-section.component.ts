@@ -75,7 +75,7 @@ export class ProcessSectionComponent implements AfterViewInit, OnDestroy {
       this.currentStepIndex = index;
       this.fadeTrigger = true;
       this.cdr.detectChanges();
-    }, 400); // 400ms feels smooth and cinematic for hiding the old image
+    }, TIMEOUTS.processSection.fadeDelay); // Match the shared process section fade duration
   }
 
   // --- Three.js Logic ---

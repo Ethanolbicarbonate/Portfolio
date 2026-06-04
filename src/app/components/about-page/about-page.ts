@@ -25,7 +25,7 @@ export class AboutPage implements OnInit, OnDestroy {
     // Restore scroll after initial hero animations complete
     setTimeout(() => {
       document.body.style.overflow = 'auto';
-    }, TIMEOUTS.INITIAL_ANIMATION);
+    }, TIMEOUTS.aboutPage.initialAnimation);
   }
 
   ngOnDestroy(): void {
@@ -80,7 +80,7 @@ export class AboutPage implements OnInit, OnDestroy {
       setTimeout(() => {
         const observeElements = this.elementRef.nativeElement.querySelectorAll('.observe-me');
         observeElements.forEach((el: HTMLElement) => this.animationObserver?.observe(el));
-      }, 100);
+      }, TIMEOUTS.aboutPage.initialDelay);
     }
   }
 }

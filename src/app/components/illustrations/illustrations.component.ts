@@ -79,7 +79,7 @@ export class IllustrationsComponent implements OnInit, OnDestroy {
           setTimeout(() => {
             this.dotsVisible = false;
             this.cdr.markForCheck();
-          }, TIMEOUTS.DOT_HIDE);
+          }, TIMEOUTS.illustrations.dotHide);
         }
         this.cdr.markForCheck();
       });
@@ -156,7 +156,7 @@ export class IllustrationsComponent implements OnInit, OnDestroy {
     this.isPreviewVisible = false;
     setTimeout(() => {
       this.previewImageUrl = null;
-    }, TIMEOUTS.PREVIEW_HIDE);
+    }, TIMEOUTS.illustrations.previewHide);
   }
 
   public scrollToProcess(): void {
