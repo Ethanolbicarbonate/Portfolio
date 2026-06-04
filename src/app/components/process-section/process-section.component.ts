@@ -1,5 +1,14 @@
 // File: src/app/components/process-section/process-section.component.ts
-import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, NgZone, ChangeDetectorRef, Input } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  ViewChild,
+  AfterViewInit,
+  OnDestroy,
+  NgZone,
+  ChangeDetectorRef,
+  Input,
+} from '@angular/core';
 import TIMEOUTS from '../../utils/timeouts';
 import { CommonModule } from '@angular/common';
 import * as THREE from 'three';
@@ -34,6 +43,7 @@ export class ProcessSectionComponent implements AfterViewInit, OnDestroy {
   private isProcessVisible = false;
   private processTime = 0;
   private processMaterial!: THREE.ShaderMaterial;
+  public hasRevealed = false;
 
   get currentStep(): ProcessStep {
     return this.processData?.steps[this.currentStepIndex];
@@ -65,7 +75,7 @@ export class ProcessSectionComponent implements AfterViewInit, OnDestroy {
 
   public setStep(index: number): void {
     if (index === this.currentStepIndex) return;
-    
+
     // Hide current
     this.fadeTrigger = false;
     this.cdr.detectChanges();
@@ -104,7 +114,7 @@ export class ProcessSectionComponent implements AfterViewInit, OnDestroy {
       positions[i * 3 + 0] = (Math.random() - 0.5) * 100;
       positions[i * 3 + 1] = (Math.random() - 0.5) * 100;
       positions[i * 3 + 2] = (Math.random() - 0.5) * 50;
-      
+
       randoms[i * 3 + 0] = Math.random(); // Sway speed
       randoms[i * 3 + 1] = Math.random(); // Rise speed
       randoms[i * 3 + 2] = Math.random(); // Size multiplier
@@ -131,7 +141,7 @@ export class ProcessSectionComponent implements AfterViewInit, OnDestroy {
       uniforms: {
         uTime: { value: 0 },
         uTexture: { value: texture },
-        uColor: { value: new THREE.Color(0x8ab4f8) } // Matches UI accent color
+        uColor: { value: new THREE.Color(0x8ab4f8) }, // Matches UI accent color
       },
       vertexShader: `
         uniform float uTime;
@@ -200,13 +210,14 @@ export class ProcessSectionComponent implements AfterViewInit, OnDestroy {
       (entries) => {
         this.isProcessVisible = entries[0].isIntersecting;
         if (this.isProcessVisible) {
+          this.hasRevealed = true; // Trigger the dynamic entry animation
           this.resizeProcessBackground();
           this.startProcessAnimation();
         } else {
           this.stopProcessAnimation();
         }
       },
-      { threshold: 0.0 },
+      { threshold: 0.15 }, // Increased threshold slightly for a better timed reveal
     );
     this.processObserver.observe(this.processSectionRef.nativeElement);
   }
@@ -219,13 +230,13 @@ export class ProcessSectionComponent implements AfterViewInit, OnDestroy {
           this.processAnimFrame = null;
           return;
         }
-        
+
         // Feed time into the shader instead of rotating the mesh
         this.processTime += 0.01;
         if (this.processMaterial) {
           this.processMaterial.uniforms['uTime'].value = this.processTime;
         }
-        
+
         // Very slow camera pan for added cinematic effect
         this.processCamera.position.x = Math.sin(this.processTime * 0.2) * 5;
         this.processCamera.position.y = Math.cos(this.processTime * 0.1) * 2;

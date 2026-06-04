@@ -4,16 +4,29 @@
   height: 100vh;
   width: 100%;
   pointer-events: none;
+  position: relative;
+  z-index: 10;
+
+  // Seamless gradient blending the 3D scene into the process section
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 35vh; // Long, soft smoky gradient
+    background: linear-gradient(to bottom, rgba(4, 11, 17, 0) 0%, #040b11 100%);
+    pointer-events: none;
+  }
 }
 
 .process-section {
   position: relative;
   z-index: 50;
   min-height: 100vh;
-  background: #040b11; // Deeper background
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.8);
-  padding: 120px 5%;
+  background: #040b11;
+  // REMOVED: border-top and box-shadow to allow the seamless blend
+  padding: 80px 5% 120px; // Slightly reduced top padding because the gradient softens the entry
   color: white;
   overflow: hidden;
 }
@@ -42,7 +55,7 @@
   &.glow-1 {
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(138,180,248,0.15) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(138, 180, 248, 0.15) 0%, transparent 70%);
     top: -100px;
     right: -100px;
   }
@@ -50,7 +63,7 @@
   &.glow-2 {
     width: 800px;
     height: 800px;
-    background: radial-gradient(circle, rgba(255,196,46,0.08) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(255, 196, 46, 0.08) 0%, transparent 70%);
     bottom: -200px;
     left: -200px;
   }
@@ -73,6 +86,18 @@
   gap: 80px;
   align-items: center;
   margin-bottom: 120px;
+
+  opacity: 0;
+  transform: translateY(60px);
+  transition:
+    opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1),
+    transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+
+  // Fired by Intersection Observer
+  &.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   @media (max-width: 1024px) {
     grid-template-columns: 1fr;
@@ -139,7 +164,7 @@
 
   .hero-visual {
     position: relative;
-    
+
     .hero-image-wrapper {
       position: relative;
       width: 100%;
@@ -211,7 +236,9 @@
     object-fit: cover;
     opacity: 0;
     transform: scale(1.05);
-    transition: opacity 0.8s ease, transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+    transition:
+      opacity 0.8s ease,
+      transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
 
     &.active {
       opacity: 1;
@@ -236,10 +263,12 @@
     padding: 40px;
     border-radius: 24px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-    
+
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.6s ease 0.2s, transform 0.6s cubic-bezier(0.25, 1, 0.5, 1) 0.2s;
+    transition:
+      opacity 0.6s ease 0.2s,
+      transform 0.6s cubic-bezier(0.25, 1, 0.5, 1) 0.2s;
 
     &.active {
       opacity: 1;
@@ -271,7 +300,7 @@
       .step-line {
         height: 1px;
         flex: 1;
-        background: linear-gradient(90deg, rgba(255,255,255,0.2), transparent);
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.2), transparent);
       }
     }
 
@@ -315,9 +344,16 @@
     font-family: monospace;
     font-size: 1.1rem;
 
-    .current { color: white; font-weight: bold; }
-    .divider { color: rgba(255, 255, 255, 0.3); }
-    .total { color: rgba(255, 255, 255, 0.5); }
+    .current {
+      color: white;
+      font-weight: bold;
+    }
+    .divider {
+      color: rgba(255, 255, 255, 0.3);
+    }
+    .total {
+      color: rgba(255, 255, 255, 0.5);
+    }
   }
 
   .progress-track {

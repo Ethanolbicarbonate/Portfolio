@@ -6,15 +6,14 @@
 <section id="process-section" class="process-section" #processSection>
   <!-- Independent Three.js Particle Background -->
   <canvas #processBgCanvas class="process-bg-canvas"></canvas>
-  
+
   <!-- CSS Ambient Glows -->
   <div class="ambient-glow glow-1"></div>
   <div class="ambient-glow glow-2"></div>
 
   <div class="process-content">
-    
-    <!-- Hero Section (Editorial Asymmetrical Grid) -->
-    <div class="process-hero-grid">
+    <!-- Hero Section (Editorial Asymmetrical Grid) - Bind the reveal class -->
+    <div class="process-hero-grid" [class.revealed]="hasRevealed">
       <div class="hero-text">
         <div class="badge">Case Study</div>
         <h2 class="project-title">{{ processData.title }}</h2>
@@ -25,7 +24,7 @@
           }
         </div>
       </div>
-      
+
       <div class="hero-visual">
         <div class="hero-image-wrapper">
           <img [src]="processData.heroImage" alt="Project Hero Image" />
@@ -36,7 +35,6 @@
 
     <!-- Cinematic Carousel Section -->
     <div class="process-showcase">
-      
       <!-- Visual Area -->
       <div class="showcase-visuals">
         <img
@@ -45,7 +43,7 @@
           class="showcase-image"
           [class.active]="fadeTrigger"
         />
-        
+
         <!-- Floating Glassmorphism Info Card -->
         <div class="floating-step-card" [class.active]="fadeTrigger">
           <div class="step-header">
@@ -66,26 +64,53 @@
         </div>
 
         <div class="progress-track">
-          <div 
-            class="progress-fill" 
-            [style.width.%]="((currentStepIndex + 1) / processData.steps.length) * 100">
-          </div>
+          <div
+            class="progress-fill"
+            [style.width.%]="((currentStepIndex + 1) / processData.steps.length) * 100"
+          ></div>
         </div>
-        
+
         <div class="nav-controls">
-          <button class="icon-btn" (click)="prevStep()" [disabled]="currentStepIndex === 0" aria-label="Previous step">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M19 12H5M12 19l-7-7 7-7"/>
+          <button
+            class="icon-btn"
+            (click)="prevStep()"
+            [disabled]="currentStepIndex === 0"
+            aria-label="Previous step"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M19 12H5M12 19l-7-7 7-7" />
             </svg>
           </button>
-          <button class="icon-btn" (click)="nextStep()" [disabled]="currentStepIndex === processData.steps.length - 1" aria-label="Next step">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
+          <button
+            class="icon-btn"
+            (click)="nextStep()"
+            [disabled]="currentStepIndex === processData.steps.length - 1"
+            aria-label="Next step"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
           </button>
         </div>
       </div>
-
     </div>
   </div>
 </section>

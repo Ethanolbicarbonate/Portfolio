@@ -84,7 +84,40 @@
   }
 }
 // ============================================================================
-// Phase 3: Bottom Actions (Skip Button + Back Button)
+// Cinematic Canvas Dimmer
+// ============================================================================
+.canvas-dimmer {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 11, 17, 0.8); // Matches the process section hex #040b11
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 5; // Above the canvas, below the UI
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+
+  &.active {
+    opacity: 1;
+  }
+}
+
+// ============================================================================
+// Smooth Fade for UI elements on scroll
+// ============================================================================
+.fade-on-scroll {
+  transition:
+    opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1),
+    transform 0.6s cubic-bezier(0.25, 1, 0.5, 1) !important;
+
+  &.hidden {
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}
+
+// ============================================================================
+// Bottom Actions (Skip Button + Back Button)
 // ============================================================================
 
 .bottom-actions {
@@ -96,7 +129,6 @@
   align-items: center;
   gap: 15px;
 
-  // Override global back-button position since it's now wrapped in a flex container
   .back-button {
     position: relative;
     bottom: auto;
@@ -121,5 +153,10 @@
   &:hover {
     background-color: rgba(255, 255, 255, 0.2);
     transform: translateY(-2px);
+  }
+
+  // Gives the skip button a slight sink effect when hiding
+  &.hidden {
+    transform: translateY(15px) !important;
   }
 }
