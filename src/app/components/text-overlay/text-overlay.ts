@@ -1,6 +1,7 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { PaperData } from '../../models/paper-data.model';
+// File: src/app/components/text-overlay/text-overlay.ts
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { PaperData } from '../../models/paper-data.model';
 
 @Component({
   selector: 'app-text-overlay',
@@ -9,19 +10,60 @@ import { CommonModule } from '@angular/common';
   templateUrl: './text-overlay.html',
   styleUrls: ['./text-overlay.scss']
 })
-export class TextOverlayComponent { // <-- Changed back to Component
+export class TextOverlayComponent implements OnChanges {
   @Input() focusedPaper: PaperData | null = null;
-
-  // NEW: Event emitter to notify the parent component to show the image
   @Output() viewImage = new EventEmitter<string>();
 
-  /**
-   * Called when the "View Image" button is clicked.
-   * It emits the URL of the currently focused paper's image.
-   */
+  public displayPaper: PaperData | null = null;
+  public isTransitioning = false; // Controls the card's blur/fade
+  public animateContent = false;  // Controls the text stagger
+
+  private transitionTimeout: any;
+  private animTimeout: any;
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['focusedPaper']) {
+      // Clear any ongoing timeouts to prevent fast-scrolling glitches
+      clearTimeout(this.transitionTimeout);
+      clearTimeout(this.animTimeout);
+
+      const prev = changes['focusedPaper'].previousValue;
+      const curr = changes['focusedPaper'].currentValue;
+
+      // If switching directly from one illustration to another
+      if (prev && curr && prev.id !== curr.id) {
+        this.isTransitioning = true; // Trigger whole card blur & fade out
+        this.animateContent = false; // Reset text animation
+
+        // Wait 400ms (matches CSS transition) before swapping data
+        this.transitionTimeout = setTimeout(() => {
+          this.displayPaper = curr;
+          this.isTransitioning = false; // Trigger card blur & fade in
+
+          // Tiny delay to let DOM register the swap before staggering text
+          this.animTimeout = setTimeout(() => {
+            this.animateContent = true;
+          }, 20);
+        }, 400);
+      } 
+      // If opening from the main overview or closing entirely
+      else {
+        this.displayPaper = curr;
+        if (curr) {
+          this.isTransitioning = false;
+          this.animTimeout = setTimeout(() => {
+            this.animateContent = true;
+          }, 50);
+        } else {
+          this.animateContent = false;
+        }
+      }
+    }
+  }
+
   public onViewClick(): void {
-    if (this.focusedPaper) {
-      this.viewImage.emit(this.focusedPaper.imageUrl);
+    if (this.displayPaper) {
+      this.viewImage.emit(this.displayPaper.imageUrl);
     }
   }
 }

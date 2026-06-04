@@ -1,28 +1,37 @@
+<!-- File: src/app/components/text-overlay/text-overlay.html -->
 <div class="text-container" [class.visible]="focusedPaper">
-  @if (focusedPaper) {
-    <div class="content-wrapper">
+  @if (displayPaper) {
+    <!-- The entire card handles the exit/enter blur transition -->
+    <div class="glass-card" [class.exiting]="isTransitioning">
+      
+      <!-- The inner wrapper handles the text staggering -->
+      <div class="content-anim-wrapper" [class.animate]="animateContent">
+        
+        <!-- Eyebrow Meta -->
+        <div class="eyebrow">
+          <span class="badge">Illustration</span>
+          <span class="index">No. {{ displayPaper.id | number:'2.0' }}</span>
+        </div>
 
-      <!-- Title -->
-      <h2>{{ focusedPaper.title }}</h2>
+        <!-- Title -->
+        <h2 class="title">{{ displayPaper.title }}</h2>
 
-      <!-- Thin Line Separator -->
-      <hr class="separator" />
+        <!-- Scrollable Description Area -->
+        <div class="description-scroll">
+          <p>{{ displayPaper.description }}</p>
+        </div>
 
-      <!-- Scrollable Description Area -->
-      <div class="description-scroll">
-        <p>{{ focusedPaper.description }}</p>
+        <!-- Actions -->
+        <div class="actions-container">
+          <button class="view-button" (click)="onViewClick()" aria-label="View Full Illustration">
+            <span class="btn-text">View Full Screen</span>
+            <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+            </svg>
+          </button>
+        </div>
+
       </div>
-
-      <!-- Thin Line Separator -->
-      <hr class="separator" />
-
-      <!-- Actions Container (for button alignment) -->
-      <div class="actions-container">
-        <button class="view-button" (click)="onViewClick()">
-          View Illustration
-        </button>
-      </div>
-
     </div>
   }
 </div>
