@@ -61,7 +61,19 @@ export class IllustrationsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    // 1. Disable browser's automatic scroll restoration on reload
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+
+    // 2. Force scroll to the absolute top immediately
+    window.scrollTo(0, 0);
+
+    // 3. Lock native scroll to keep the user in the 3D canvas view
     document.body.style.overflow = 'hidden';
+    
+    // Explicitly set state to top
+    this.isAtTop = true;
     this.checkScrollPosition();
 
     this.processScrollSub = this.threeService.onScrollToProcess.subscribe(() => {
@@ -89,6 +101,11 @@ export class IllustrationsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // IMPORTANT: Restore default browser scroll behavior for other routes (like the About page)
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'auto';
+    }
+    
     // IMPORTANT: Restore scroll capability so the About page doesn't break
     document.body.style.overflow = 'auto';
 
@@ -101,7 +118,6 @@ export class IllustrationsComponent implements OnInit, OnDestroy {
       this.threeService.disposeScene();
     });
   }
-
   // -------------------------------------------------------------------------
   // Existing Scroll & Keyboard Listeners
   // -------------------------------------------------------------------------
