@@ -12,14 +12,13 @@ import {
 import TIMEOUTS from '../../utils/timeouts';
 import { CommonModule } from '@angular/common';
 import * as THREE from 'three';
-
-// Import the newly created interfaces
 import { ProcessProject, ProcessStep } from '../../models/process-data.model';
+import { ParticleTrailDirective } from '../particle-trail/particle-trail.directive';
 
 @Component({
   selector: 'app-process-section',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ParticleTrailDirective],
   templateUrl: './process-section.component.html',
   styleUrls: ['./process-section.component.scss'],
 })

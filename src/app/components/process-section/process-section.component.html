@@ -1,18 +1,12 @@
-<!-- File: src/app/components/process-section/process-section.component.html -->
-
-<!-- Spacer to keep the 3D canvas visible underneath -->
 <div class="hero-spacer"></div>
 
 <section id="process-section" class="process-section" #processSection>
-  <!-- Independent Three.js Particle Background -->
   <canvas #processBgCanvas class="process-bg-canvas"></canvas>
 
-  <!-- CSS Ambient Glows -->
   <div class="ambient-glow glow-1"></div>
   <div class="ambient-glow glow-2"></div>
 
   <div class="process-content">
-    <!-- Hero Section (Editorial Asymmetrical Grid) - Bind the reveal class -->
     <div class="process-hero-grid" [class.revealed]="hasRevealed">
       <div class="hero-text">
         <div class="badge">Case Study</div>
@@ -26,14 +20,14 @@
       </div>
 
       <div class="hero-visual">
-        <div class="hero-image-wrapper">
+        <div class="hero-image-wrapper" appParticleTrail>
           <img [src]="processData.heroImage" alt="Project Hero Image" />
           <div class="overlay-gradient"></div>
         </div>
       </div>
     </div>
 
-    <!-- Cinematic Carousel Section -->
+    <!-- Carousel Section -->
     <div class="process-showcase">
       <!-- Visual Area -->
       <div class="showcase-visuals">
@@ -45,7 +39,7 @@
         />
 
         <!-- Floating Glassmorphism Info Card -->
-        <div class="floating-step-card" [class.active]="fadeTrigger">
+        <div class="floating-step-card" [class.active]="fadeTrigger" appParticleTrail>
           <div class="step-header">
             <span class="step-num">0{{ currentStepIndex + 1 }}</span>
             <span class="step-line"></span>

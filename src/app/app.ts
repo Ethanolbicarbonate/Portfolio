@@ -3,6 +3,7 @@ import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { ThreeService } from './services/three.service';
+import { ParticleTrailComponent } from './components/particle-trail/particle-trail.component';
 
 import {
   trigger,
@@ -42,7 +43,7 @@ export const routeAnimations = trigger('routeAnimations', [
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, ParticleTrailComponent],
   templateUrl: './app.html',
   styleUrls: ['./app.scss'],
   animations: [routeAnimations]
