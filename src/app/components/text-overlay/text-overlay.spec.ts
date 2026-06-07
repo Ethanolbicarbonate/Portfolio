@@ -8,9 +8,8 @@ describe('TextOverlay', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TextOverlayComponent]
-    })
-    .compileComponents();
+      imports: [TextOverlayComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TextOverlayComponent);
     component = fixture.componentInstance;

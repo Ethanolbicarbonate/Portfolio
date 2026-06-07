@@ -785,7 +785,7 @@ export class ThreeService implements OnDestroy {
     this.onFocusChange.next(this.paperData[this.currentFocusIndex]);
   }
 
-// =========================================================================
+  // =========================================================================
   // Particles — Upgraded Organic & Glowing
   // =========================================================================
 
@@ -801,11 +801,11 @@ export class ThreeService implements OnDestroy {
       positions[i * 3 + 0] = (Math.random() - 0.5) * boxSize;
       positions[i * 3 + 1] = (Math.random() - 0.5) * boxSize;
       positions[i * 3 + 2] = (Math.random() - 0.5) * boxSize;
-      
+
       // x = sway speed, y = blink speed
       animData[i * 2 + 0] = Math.random() * Math.PI * 2;
-      animData[i * 2 + 1] = 0.2 + Math.random() * 0.8; 
-      
+      animData[i * 2 + 1] = 0.2 + Math.random() * 0.8;
+
       // Varying sizes for depth perception
       sizes[i] = Math.random() * 0.5 + 0.1;
     }
@@ -839,7 +839,7 @@ export class ThreeService implements OnDestroy {
       opacity: 0.6,
     });
 
-material.onBeforeCompile = (shader) => {
+    material.onBeforeCompile = (shader) => {
       const timeUniform = { value: 0.0 };
       shader.uniforms['time'] = timeUniform;
       this.particleTimeUniform = timeUniform;
@@ -850,9 +850,10 @@ material.onBeforeCompile = (shader) => {
         varying vec2 vAnimationData;
         uniform float time;
         ${shader.vertexShader}
-      `.replace(
-        '#include <begin_vertex>',
-        `
+      `
+        .replace(
+          '#include <begin_vertex>',
+          `
         vAnimationData = aAnimationData;
         
         // 1. Slow down time heavily for a gentle float
@@ -874,11 +875,9 @@ material.onBeforeCompile = (shader) => {
         transformed.x += wanderX * constraintRadius;
         transformed.y += wanderY * constraintRadius;
         transformed.z += wanderZ * constraintRadius;
-        `
-      ).replace(
-        'gl_PointSize = size;',
-        `gl_PointSize = size * aSize * (10.0 / -mvPosition.z);`
-      );
+        `,
+        )
+        .replace('gl_PointSize = size;', `gl_PointSize = size * aSize * (10.0 / -mvPosition.z);`);
 
       shader.fragmentShader = `
         uniform float time;
@@ -891,7 +890,7 @@ material.onBeforeCompile = (shader) => {
         float blink = (sin(time * 0.5 * vAnimationData.y + vAnimationData.x) + 1.0) * 0.5;
         blink = smoothstep(0.0, 1.0, blink) * 0.8 + 0.2; 
         vec4 diffuseColor = vec4(diffuse, opacity * blink);
-        `
+        `,
       );
     };
 

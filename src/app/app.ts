@@ -5,39 +5,30 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { ThreeService } from './services/three.service';
 import { ParticleTrailComponent } from './components/particle-trail/particle-trail.component';
 
-import {
-  trigger,
-  transition,
-  style,
-  animate,
-  query,
-  group,
-} from '@angular/animations';
+import { trigger, transition, style, animate, query, group } from '@angular/animations';
 
 export const routeAnimations = trigger('routeAnimations', [
   transition('* <=> *', [
     style({ position: 'relative' }),
-    query(':enter, :leave', [
-      style({
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-      })
-    ], { optional: true }),
-    query(':enter', [
-      style({ opacity: 0 })
-    ], { optional: true }),
+    query(
+      ':enter, :leave',
+      [
+        style({
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+        }),
+      ],
+      { optional: true },
+    ),
+    query(':enter', [style({ opacity: 0 })], { optional: true }),
     group([
-      query(':leave', [
-        animate('0.5s ease-out', style({ opacity: 0 }))
-      ], { optional: true }),
-      query(':enter', [
-        animate('0.5s ease-in', style({ opacity: 1 }))
-      ], { optional: true })
-    ])
-  ])
+      query(':leave', [animate('0.5s ease-out', style({ opacity: 0 }))], { optional: true }),
+      query(':enter', [animate('0.5s ease-in', style({ opacity: 1 }))], { optional: true }),
+    ]),
+  ]),
 ]);
 
 @Component({
@@ -46,7 +37,7 @@ export const routeAnimations = trigger('routeAnimations', [
   imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, ParticleTrailComponent],
   templateUrl: './app.html',
   styleUrls: ['./app.scss'],
-  animations: [routeAnimations]
+  animations: [routeAnimations],
 })
 export class App {
   constructor(private threeService: ThreeService) {}

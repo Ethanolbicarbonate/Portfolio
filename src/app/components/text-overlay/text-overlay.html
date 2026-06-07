@@ -3,14 +3,12 @@
   @if (displayPaper) {
     <!-- The entire card handles the exit/enter blur transition -->
     <div class="glass-card" [class.exiting]="isTransitioning">
-      
       <!-- The inner wrapper handles the text staggering -->
       <div class="content-anim-wrapper" [class.animate]="animateContent">
-        
         <!-- Eyebrow Meta -->
         <div class="eyebrow">
           <span class="badge">Illustration</span>
-          <span class="index">No. {{ displayPaper.id | number:'2.0' }}</span>
+          <span class="index">No. {{ displayPaper.id | number: '2.0' }}</span>
         </div>
 
         <!-- Title -->
@@ -25,12 +23,21 @@
         <div class="actions-container">
           <button class="view-button" (click)="onViewClick()" aria-label="View Full Illustration">
             <span class="btn-text">View Full Screen</span>
-            <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+            <svg
+              class="btn-icon"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
             </svg>
           </button>
         </div>
-
       </div>
     </div>
   }

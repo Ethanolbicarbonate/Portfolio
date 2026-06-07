@@ -8,10 +8,9 @@ import TIMEOUTS from '../../utils/timeouts';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './about-page.html',
-  styleUrl: './about-page.scss'
+  styleUrl: './about-page.scss',
 })
 export class AboutPage implements OnInit, OnDestroy {
-  
   private animationObserver?: IntersectionObserver;
 
   constructor(private elementRef: ElementRef) {}
@@ -19,9 +18,9 @@ export class AboutPage implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Prevent background scrolling while entering
     document.body.style.overflow = 'hidden';
-    
+
     this.setupAnimationObserver();
-    
+
     // Restore scroll after initial hero animations complete
     setTimeout(() => {
       document.body.style.overflow = 'auto';
@@ -30,7 +29,7 @@ export class AboutPage implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     document.body.style.overflow = 'auto';
-    
+
     if (this.animationObserver) {
       this.animationObserver.disconnect();
     }
@@ -59,12 +58,12 @@ export class AboutPage implements OnInit, OnDestroy {
     if (typeof window !== 'undefined' && 'IntersectionObserver' in window) {
       this.animationObserver = new IntersectionObserver(
         (entries) => {
-          entries.forEach(entry => {
+          entries.forEach((entry) => {
             if (entry.isIntersecting) {
               // Add a slight delay based on the DOM structure for a staggered effect
               const target = entry.target as HTMLElement;
               target.classList.add('animate-in');
-              
+
               // Once animated in, we can stop observing it
               this.animationObserver?.unobserve(target);
             }
@@ -72,8 +71,8 @@ export class AboutPage implements OnInit, OnDestroy {
         },
         {
           threshold: 0.1, // Trigger when 10% visible
-          rootMargin: '0px 0px -50px 0px' // Slightly trigger before it reaches the bottom
-        }
+          rootMargin: '0px 0px -50px 0px', // Slightly trigger before it reaches the bottom
+        },
       );
 
       // Start observing after a tick

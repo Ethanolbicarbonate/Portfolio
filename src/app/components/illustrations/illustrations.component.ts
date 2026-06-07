@@ -71,7 +71,7 @@ export class IllustrationsComponent implements OnInit, OnDestroy {
 
     // 3. Lock native scroll to keep the user in the 3D canvas view
     document.body.style.overflow = 'hidden';
-    
+
     // Explicitly set state to top
     this.isAtTop = true;
     this.checkScrollPosition();
@@ -105,7 +105,7 @@ export class IllustrationsComponent implements OnInit, OnDestroy {
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'auto';
     }
-    
+
     // IMPORTANT: Restore scroll capability so the About page doesn't break
     document.body.style.overflow = 'auto';
 

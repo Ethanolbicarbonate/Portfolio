@@ -6,13 +6,13 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './pagination-rail.component.html',
-  styleUrls: ['./pagination-rail.component.scss']
+  styleUrls: ['./pagination-rail.component.scss'],
 })
 export class PaginationRailComponent implements OnChanges {
   @Input() totalItems: number = 0;
   @Input() activeIndex: number = -1;
   @Input() isVisible: boolean = false;
-  
+
   @Output() dotClick = new EventEmitter<number>();
 
   dotIndices: number[] = [];

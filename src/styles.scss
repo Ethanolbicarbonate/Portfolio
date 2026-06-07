@@ -23,7 +23,9 @@
   justify-content: center;
 
   // Transitions
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease;
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.2);
@@ -31,18 +33,19 @@
   }
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   // Phase 3: Change height to min-height to allow downward scrolling
   min-height: 100vh;
   width: 100%;
   background-color: #06111a;
-  
+
   // Phase 3: Hide scrollbars for a cleaner presentation, but keep scrollability
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
-  
+
   &::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
   }

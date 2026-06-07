@@ -8,7 +8,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   padding: 40px 20px 100px;
-  
+
   // Custom scrollbar
   &::-webkit-scrollbar {
     width: 8px;
@@ -36,7 +36,7 @@
   &.glow-1 {
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(138,180,248,0.2) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(138, 180, 248, 0.2) 0%, transparent 70%);
     top: -100px;
     left: -100px;
   }
@@ -44,15 +44,15 @@
   &.glow-2 {
     width: 800px;
     height: 800px;
-    background: radial-gradient(circle, rgba(255,196,46,0.1) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(255, 196, 46, 0.1) 0%, transparent 70%);
     top: 40%;
     right: -200px;
   }
-  
+
   &.glow-3 {
     width: 500px;
     height: 500px;
-    background: radial-gradient(circle, rgba(138,180,248,0.15) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(138, 180, 248, 0.15) 0%, transparent 70%);
     bottom: -100px;
     left: 20%;
   }
@@ -106,7 +106,7 @@
       letter-spacing: -3px;
       display: flex;
       flex-direction: column;
-      
+
       span {
         background: linear-gradient(135deg, #ffffff 20%, rgba(255, 255, 255, 0.3) 100%);
         background-clip: text;
@@ -115,9 +115,16 @@
         animation: fadeUp 1s cubic-bezier(0.25, 1, 0.5, 1) backwards;
       }
 
-      .line-1 { animation-delay: 0.1s; }
-      .line-2 { animation-delay: 0.2s; padding-left: 10%; } // Asymmetric indent
-      .line-3 { animation-delay: 0.3s; }
+      .line-1 {
+        animation-delay: 0.1s;
+      }
+      .line-2 {
+        animation-delay: 0.2s;
+        padding-left: 10%;
+      } // Asymmetric indent
+      .line-3 {
+        animation-delay: 0.3s;
+      }
     }
 
     .role-subtitle {
@@ -207,10 +214,26 @@
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   overflow: hidden;
-  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), background 0.3s ease, border-color 0.3s ease;
+  transition:
+    transform 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+    background 0.3s ease,
+    border-color 0.3s ease;
 
-  &.span-2 { grid-column: span 2; @media (max-width: 600px) { grid-column: span 1; } }
-  &.span-3 { grid-column: span 3; @media (max-width: 900px) { grid-column: span 2; } @media (max-width: 600px) { grid-column: span 1; } }
+  &.span-2 {
+    grid-column: span 2;
+    @media (max-width: 600px) {
+      grid-column: span 1;
+    }
+  }
+  &.span-3 {
+    grid-column: span 3;
+    @media (max-width: 900px) {
+      grid-column: span 2;
+    }
+    @media (max-width: 600px) {
+      grid-column: span 1;
+    }
+  }
 
   &:hover {
     transform: translateY(-5px);
@@ -303,7 +326,7 @@
       gap: 30px;
       align-items: baseline;
       padding-bottom: 25px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 
       &:last-child {
         border-bottom: none;
@@ -339,7 +362,7 @@
 
 .contact-card {
   background: linear-gradient(135deg, rgba(138, 180, 248, 0.05), rgba(255, 255, 255, 0.02));
-  
+
   .contact-flex {
     flex-direction: row;
     align-items: center;
@@ -371,7 +394,7 @@
     flex-direction: column;
     gap: 15px;
     min-width: 250px;
-    
+
     @media (max-width: 768px) {
       width: 100%;
     }
@@ -398,7 +421,7 @@
       &:hover {
         background: white;
         color: #040b11;
-        
+
         .btn-arrow {
           transform: translateX(5px);
         }
@@ -411,19 +434,31 @@
 // Animations (Triggered via IntersectionObserver in TS)
 // ============================================================================
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .observe-me {
   opacity: 0;
   transform: translateY(40px);
-  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
 
   &.animate-in {
     opacity: 1;

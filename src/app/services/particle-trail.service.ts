@@ -19,7 +19,7 @@ export class ParticleTrailService {
 
   getVisibleElements(): HTMLElement[] {
     const visible: HTMLElement[] = [];
-    this.elements.forEach(item => {
+    this.elements.forEach((item) => {
       if (item.isVisible) visible.push(item.el);
     });
     return visible;

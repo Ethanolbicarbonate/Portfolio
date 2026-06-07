@@ -1,52 +1,54 @@
-<!-- File: src/app/components/illustrations/illustrations.component.html -->
 <app-scene></app-scene>
 
-<!-- Dynamic Dark/Blur Overlay for the 3D Canvas -->
 <div class="canvas-dimmer" [class.active]="!isAtTop"></div>
 
-<!-- Text overlay smoothly hides on scroll -->
-<app-text-overlay 
-  class="fade-on-scroll" 
+<app-text-overlay
+  class="fade-on-scroll"
   [class.hidden]="!isAtTop"
-  [focusedPaper]="focusedPaper" 
-  (viewImage)="onPreviewImage($event)">
+  [focusedPaper]="focusedPaper"
+  (viewImage)="onPreviewImage($event)"
+>
 </app-text-overlay>
 
-<!-- General view logo -->
-<div class="general-view-ui fade-on-scroll" [class.visible]="!focusedPaper" [class.hidden]="!isAtTop">
+<div
+  class="general-view-ui fade-on-scroll"
+  [class.visible]="!focusedPaper"
+  [class.hidden]="!isAtTop"
+>
   <h1 class="main-title">
     <img src="assets/images/EJC.svg" alt="EJC Logo" class="main-logo" />
   </h1>
 </div>
 
-<!-- Vertical pagination dot rail -->
-<app-pagination-rail 
-  [totalItems]="totalIllustrations" 
-  [activeIndex]="activeDotIndex" 
-  [isVisible]="dotsVisible && isAtTop" 
-  (dotClick)="onDotClick($event)">
+<app-pagination-rail
+  [totalItems]="totalIllustrations"
+  [activeIndex]="activeDotIndex"
+  [isVisible]="dotsVisible && isAtTop"
+  (dotClick)="onDotClick($event)"
+>
 </app-pagination-rail>
 
-<!-- Bottom Actions -->
 @if (focusedPaper) {
   <div class="bottom-actions">
-    <!-- Smoothly hide instead of using @if to remove from DOM instantly -->
-    <button class="skip-button fade-on-scroll" [class.hidden]="!isAtTop" (click)="scrollToProcess()">
+    <button
+      class="skip-button fade-on-scroll"
+      [class.hidden]="!isAtTop"
+      (click)="scrollToProcess()"
+    >
       Skip to Process
     </button>
-    
+
     <button class="back-button" (click)="returnToGeneralView()" aria-label="Return to overview">
       &#x21A9;
     </button>
   </div>
 }
 
-<!-- Full-screen image preview overlay -->
-<app-image-preview 
-  [imageUrl]="previewImageUrl" 
-  [isVisible]="isPreviewVisible" 
-  (close)="closePreview()">
+<app-image-preview
+  [imageUrl]="previewImageUrl"
+  [isVisible]="isPreviewVisible"
+  (close)="closePreview()"
+>
 </app-image-preview>
 
-<!-- Process Section -->
 <app-process-section [processData]="processData"></app-process-section>

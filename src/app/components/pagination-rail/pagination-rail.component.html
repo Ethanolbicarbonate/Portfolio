@@ -1,15 +1,11 @@
-<nav
-  class="pagination-rail"
-  [class.visible]="isVisible"
-  aria-label="Illustration navigation">
-
+<nav class="pagination-rail" [class.visible]="isVisible" aria-label="Illustration navigation">
   @for (i of dotIndices; track i) {
     <button
       class="pagination-dot"
       [class.active]="i === activeIndex"
       (click)="onDotClick(i)"
       [attr.aria-label]="'Go to illustration ' + (i + 1)"
-      [attr.aria-current]="i === activeIndex ? 'true' : null">
-    </button>
+      [attr.aria-current]="i === activeIndex ? 'true' : null"
+    ></button>
   }
 </nav>

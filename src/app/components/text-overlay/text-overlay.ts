@@ -9,7 +9,7 @@ import { PaperData } from '../../models/paper-data.model';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './text-overlay.html',
-  styleUrls: ['./text-overlay.scss']
+  styleUrls: ['./text-overlay.scss'],
 })
 export class TextOverlayComponent implements OnChanges {
   @Input() focusedPaper: PaperData | null = null;
@@ -17,7 +17,7 @@ export class TextOverlayComponent implements OnChanges {
 
   public displayPaper: PaperData | null = null;
   public isTransitioning = false; // Controls the card's blur/fade
-  public animateContent = false;  // Controls the text stagger
+  public animateContent = false; // Controls the text stagger
 
   private transitionTimeout: any;
   private animTimeout: any;
@@ -46,7 +46,7 @@ export class TextOverlayComponent implements OnChanges {
             this.animateContent = true;
           }, TIMEOUTS.textOverlay.contentDelay);
         }, TIMEOUTS.textOverlay.transition);
-      } 
+      }
       // If opening from the main overview or closing entirely
       else {
         this.displayPaper = curr;
