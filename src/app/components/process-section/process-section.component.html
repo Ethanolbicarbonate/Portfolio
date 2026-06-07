@@ -29,82 +29,76 @@
 
     <!-- Carousel Section -->
     <div class="process-showcase">
-      <!-- Visual Area -->
-      <div class="showcase-visuals">
-        <img
-          [src]="currentStep.image"
-          alt="Process step visual"
-          class="showcase-image"
-          [class.active]="fadeTrigger"
-        />
-
-        <!-- Floating Glassmorphism Info Card -->
-        <div class="floating-step-card" [class.active]="fadeTrigger" appParticleTrail>
-          <div class="step-header">
-            <span class="step-num">0{{ currentStepIndex + 1 }}</span>
-            <span class="step-line"></span>
-            <h3 class="step-title">{{ currentStep.title }}</h3>
+      
+      <div class="showcase-layout-grid">
+        
+        <!-- Left: Unobstructed Visual Area -->
+        <div class="showcase-visuals">
+          <!-- Background Watermark Number -->
+          <div class="step-watermark" [class.active]="fadeTrigger">
+            0{{ currentStepIndex + 1 }}
           </div>
-          <p class="step-caption">{{ currentStep.caption }}</p>
+
+          <div class="image-container" appParticleTrail [class.active]="fadeTrigger">
+            <img
+              [src]="currentStep.image"
+              alt="Process step visual"
+              class="showcase-image"
+            />
+            <div class="image-glare"></div>
+            <!-- Creative framing accents -->
+            <div class="frame-accent top-left"></div>
+            <div class="frame-accent bottom-right"></div>
+          </div>
+        </div>
+
+        <!-- Right: Glassmorphism Info & Nav Panel -->
+        <div class="showcase-info-panel" [class.active]="fadeTrigger">
+          
+          <div class="panel-content">
+            <div class="step-eyebrow">
+              <span class="step-num">PHASE // 0{{ currentStepIndex + 1 }}</span>
+              <span class="step-line"></span>
+            </div>
+            
+            <h3 class="step-title">{{ currentStep.title }}</h3>
+            <p class="step-caption">{{ currentStep.caption }}</p>
+          </div>
+
+          <!-- Integrated Modern Navigation -->
+          <div class="showcase-nav-integrated">
+            <div class="progress-track">
+              <div 
+                class="progress-fill" 
+                [style.width.%]="((currentStepIndex + 1) / processData.steps.length) * 100">
+              </div>
+            </div>
+            
+            <div class="nav-bottom-row">
+              <div class="nav-info">
+                <span class="current">0{{ currentStepIndex + 1 }}</span>
+                <span class="divider">/</span>
+                <span class="total">0{{ processData.steps.length }}</span>
+              </div>
+              
+              <div class="nav-controls">
+                <button class="icon-btn" (click)="prevStep()" [disabled]="currentStepIndex === 0" aria-label="Previous step">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                  </svg>
+                </button>
+                <button class="icon-btn" (click)="nextStep()" [disabled]="currentStepIndex === processData.steps.length - 1" aria-label="Next step">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 
-      <!-- Modern Navigation Rail -->
-      <div class="showcase-nav">
-        <div class="nav-info">
-          <span class="current">0{{ currentStepIndex + 1 }}</span>
-          <span class="divider">/</span>
-          <span class="total">0{{ processData.steps.length }}</span>
-        </div>
-
-        <div class="progress-track">
-          <div
-            class="progress-fill"
-            [style.width.%]="((currentStepIndex + 1) / processData.steps.length) * 100"
-          ></div>
-        </div>
-
-        <div class="nav-controls">
-          <button
-            class="icon-btn"
-            (click)="prevStep()"
-            [disabled]="currentStepIndex === 0"
-            aria-label="Previous step"
-          >
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M19 12H5M12 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <button
-            class="icon-btn"
-            (click)="nextStep()"
-            [disabled]="currentStepIndex === processData.steps.length - 1"
-            aria-label="Next step"
-          >
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </button>
-        </div>
-      </div>
     </div>
   </div>
 </section>

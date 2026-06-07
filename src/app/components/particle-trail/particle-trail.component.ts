@@ -120,7 +120,7 @@ export class ParticleTrailComponent implements AfterViewInit, OnDestroy {
           vy: -deltaY * (Math.random() * 0.03 + 0.01), // Slightly softer initial vertical burst
           life: 1.0,
           maxLife: 1.0,
-          size: Math.random() * 20 + 10,
+          size: Math.random() * 10 + 5,
           angle: Math.random() * Math.PI * 2, // Start at a random point in the sine wave
           swaySpeed: Math.random() * 0.03 + 0.01 // Randomize how fast they wiggle
         });
